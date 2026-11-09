@@ -51,8 +51,8 @@ function AppBarTitle({ className, ...props }: React.ComponentProps<"h1">) {
       data-slot="app-bar-title"
       className={cn(
         "flex-1 truncate font-heading text-xl font-normal ",
-        "[[data-variant=medium]_&]:order-last [[data-variant=medium]_&]:w-full [[data-variant=medium]_&]:text-2xl",
-        "[[data-variant=large]_&]:order-last [[data-variant=large]_&]:w-full [[data-variant=large]_&]:text-4xl",
+        "[[data-variant=medium]_&]:order-last [[data-variant=medium]_&]:flex-[0_0_100%] [[data-variant=medium]_&]:text-2xl",
+        "[[data-variant=large]_&]:order-last [[data-variant=large]_&]:flex-[0_0_100%] [[data-variant=large]_&]:text-4xl",
         className
       )}
       {...props}

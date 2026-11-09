@@ -18,7 +18,7 @@ import { TransferList } from "@/components/ui/transfer-list"
 import { Label } from "@/components/ui/label"
 import { Fab } from "@/components/ui/fab"
 import { SpeedDial } from "@/components/ui/speed-dial"
-import { CopyIcon, PrinterIcon, ShareIcon, SaveIcon } from "lucide-react"
+import { CopyIcon, PrinterIcon, SaveIcon } from "lucide-react"
 
 const frameworks = ["React", "Vue", "Svelte", "Solid", "Angular", "Qwik"]
 
@@ -259,20 +259,19 @@ export function FormSections() {
       </Section>
 
       <Section name="speed-dial" title="Speed Dial">
-        <Row label="Directions (click to open; Esc closes). Second is open by default." className="min-h-64 gap-32 pl-16 pt-48">
-          {(["up", "down", "left", "right"] as const).map((d, i) => (
-            <SpeedDial
-              key={d}
-              direction={d}
-              defaultOpen={i === 0}
-              className={d === "down" ? "-mt-40" : undefined}
-              actions={[
-                { key: "copy", icon: <CopyIcon />, label: "Copy" },
-                { key: "save", icon: <SaveIcon />, label: "Save" },
-                { key: "print", icon: <PrinterIcon />, label: "Print" },
-                { key: "share", icon: <ShareIcon />, label: "Share" },
-              ]}
-            />
+        <Row label="Directions (click to open; Esc closes). The first is open by default.">
+          {([["up", "items-end justify-center"], ["down", "items-start justify-center"], ["left", "items-center justify-end"], ["right", "items-center justify-start"]] as const).map(([d, place], i) => (
+            <div key={d} className={`flex h-72 w-56 rounded-xl border border-dashed border-border p-4 ${place}`}>
+              <SpeedDial
+                direction={d}
+                defaultOpen={i === 0}
+                actions={[
+                  { key: "copy", icon: <CopyIcon />, label: "Copy" },
+                  { key: "save", icon: <SaveIcon />, label: "Save" },
+                  { key: "print", icon: <PrinterIcon />, label: "Print" },
+                ]}
+              />
+            </div>
           ))}
         </Row>
       </Section>
