@@ -1,0 +1,150 @@
+/*
+ * THEME: Violet (M3 baseline-style)
+ *
+ * The single source of truth for every color, radius, font and motion value.
+ * Swap the look of the whole app by replacing src/theme.css with another file
+ * that defines these same variables (see src/themes/*.css, scripts/set-theme.mjs).
+ * Components never hard-code visual values; they read these via index.css.
+ */
+@import "@fontsource-variable/geist";
+
+:root {
+  color-scheme: light dark;
+
+  /* ── Seed hues (oklch hue angle) ─────────────────────────── */
+  --hue-primary: 295;
+  --hue-secondary: 305;
+  --hue-tertiary: 350;
+  --hue-error: 25;
+  --hue-neutral: 295;
+
+  /* ── Typography ──────────────────────────────────────────── */
+  --typeface-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --typeface-heading: var(--typeface-sans);
+  --typeface-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ── Shape (M3 scale; "full" gives pills) ────────────────── */
+  --shape-xs: 4px;
+  --shape-sm: 8px;
+  --shape-md: 12px;
+  --shape-lg: 16px;
+  --shape-xl: 28px;
+  --shape-full: 9999px;
+
+  /* ── Motion ──────────────────────────────────────────────── */
+  --motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-easing-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --motion-easing-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --motion-duration-short: 150ms;
+  --motion-duration-medium: 300ms;
+  --motion-duration-long: 500ms;
+
+  /* ── Elevation (uses --md-shadow) ────────────────────────── */
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px var(--md-shadow), 0 1px 3px 1px var(--md-shadow);
+  --elevation-2: 0 1px 2px var(--md-shadow), 0 2px 6px 2px var(--md-shadow);
+  --elevation-3: 0 4px 8px 3px var(--md-shadow), 0 1px 3px var(--md-shadow);
+
+  /* ── M3 color roles: light ───────────────────────────────── */
+  --md-primary: oklch(0.45 0.15 var(--hue-primary));
+  --md-on-primary: oklch(0.99 0.005 var(--hue-primary));
+  --md-primary-container: oklch(0.91 0.06 var(--hue-primary));
+  --md-on-primary-container: oklch(0.25 0.1 var(--hue-primary));
+  --md-secondary: oklch(0.47 0.06 var(--hue-secondary));
+  --md-on-secondary: oklch(0.99 0.005 var(--hue-secondary));
+  --md-secondary-container: oklch(0.91 0.04 var(--hue-secondary));
+  --md-on-secondary-container: oklch(0.26 0.05 var(--hue-secondary));
+  --md-tertiary: oklch(0.47 0.1 var(--hue-tertiary));
+  --md-on-tertiary: oklch(0.99 0.005 var(--hue-tertiary));
+  --md-tertiary-container: oklch(0.92 0.05 var(--hue-tertiary));
+  --md-on-tertiary-container: oklch(0.27 0.08 var(--hue-tertiary));
+  --md-error: oklch(0.5 0.19 var(--hue-error));
+  --md-on-error: oklch(0.99 0.005 var(--hue-error));
+  --md-error-container: oklch(0.92 0.05 var(--hue-error));
+  --md-on-error-container: oklch(0.28 0.13 var(--hue-error));
+  --md-surface: oklch(0.985 0.006 var(--hue-neutral));
+  --md-surface-dim: oklch(0.88 0.012 var(--hue-neutral));
+  --md-surface-bright: oklch(0.985 0.006 var(--hue-neutral));
+  --md-surface-container-lowest: oklch(1 0 var(--hue-neutral));
+  --md-surface-container-low: oklch(0.97 0.008 var(--hue-neutral));
+  --md-surface-container: oklch(0.955 0.01 var(--hue-neutral));
+  --md-surface-container-high: oklch(0.94 0.012 var(--hue-neutral));
+  --md-surface-container-highest: oklch(0.92 0.014 var(--hue-neutral));
+  --md-on-surface: oklch(0.2 0.012 var(--hue-neutral));
+  --md-on-surface-variant: oklch(0.45 0.02 var(--hue-neutral));
+  --md-outline: oklch(0.58 0.02 var(--hue-neutral));
+  --md-outline-variant: oklch(0.82 0.02 var(--hue-neutral));
+  --md-scrim: oklch(0 0 0 / 32%);
+  --md-shadow: oklch(0 0 0 / 18%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* ── M3 color roles: dark ──────────────────────────────── */
+    --md-primary: oklch(0.8 0.12 var(--hue-primary));
+    --md-on-primary: oklch(0.3 0.1 var(--hue-primary));
+    --md-primary-container: oklch(0.38 0.12 var(--hue-primary));
+    --md-on-primary-container: oklch(0.92 0.05 var(--hue-primary));
+    --md-secondary: oklch(0.8 0.06 var(--hue-secondary));
+    --md-on-secondary: oklch(0.3 0.05 var(--hue-secondary));
+    --md-secondary-container: oklch(0.38 0.06 var(--hue-secondary));
+    --md-on-secondary-container: oklch(0.92 0.03 var(--hue-secondary));
+    --md-tertiary: oklch(0.8 0.09 var(--hue-tertiary));
+    --md-on-tertiary: oklch(0.3 0.08 var(--hue-tertiary));
+    --md-tertiary-container: oklch(0.38 0.09 var(--hue-tertiary));
+    --md-on-tertiary-container: oklch(0.92 0.04 var(--hue-tertiary));
+    --md-error: oklch(0.8 0.12 var(--hue-error));
+    --md-on-error: oklch(0.3 0.12 var(--hue-error));
+    --md-error-container: oklch(0.38 0.13 var(--hue-error));
+    --md-on-error-container: oklch(0.92 0.05 var(--hue-error));
+    --md-surface: oklch(0.17 0.012 var(--hue-neutral));
+    --md-surface-dim: oklch(0.15 0.01 var(--hue-neutral));
+    --md-surface-bright: oklch(0.28 0.012 var(--hue-neutral));
+    --md-surface-container-lowest: oklch(0.13 0.01 var(--hue-neutral));
+    --md-surface-container-low: oklch(0.19 0.012 var(--hue-neutral));
+    --md-surface-container: oklch(0.21 0.013 var(--hue-neutral));
+    --md-surface-container-high: oklch(0.25 0.014 var(--hue-neutral));
+    --md-surface-container-highest: oklch(0.28 0.015 var(--hue-neutral));
+    --md-on-surface: oklch(0.92 0.01 var(--hue-neutral));
+    --md-on-surface-variant: oklch(0.8 0.02 var(--hue-neutral));
+    --md-outline: oklch(0.62 0.02 var(--hue-neutral));
+    --md-outline-variant: oklch(0.38 0.02 var(--hue-neutral));
+    --md-scrim: oklch(0 0 0 / 32%);
+    --md-shadow: oklch(0 0 0 / 50%);
+  }
+}
+
+/* ── shadcn/ui token mapping (same in light and dark) ───────── */
+:root {
+  --background: var(--md-surface);
+  --foreground: var(--md-on-surface);
+  --card: var(--md-surface-container-low);
+  --card-foreground: var(--md-on-surface);
+  --popover: var(--md-surface-container);
+  --popover-foreground: var(--md-on-surface);
+  --primary: var(--md-primary);
+  --primary-foreground: var(--md-on-primary);
+  --secondary: var(--md-secondary-container);
+  --secondary-foreground: var(--md-on-secondary-container);
+  --muted: var(--md-surface-container-high);
+  --muted-foreground: var(--md-on-surface-variant);
+  --accent: var(--md-surface-container-highest);
+  --accent-foreground: var(--md-on-surface);
+  --destructive: var(--md-error);
+  --border: var(--md-outline-variant);
+  --input: var(--md-outline);
+  --ring: var(--md-primary);
+  --chart-1: var(--md-primary);
+  --chart-2: var(--md-tertiary);
+  --chart-3: var(--md-secondary);
+  --chart-4: var(--md-error);
+  --chart-5: var(--md-outline);
+  --sidebar: var(--md-surface-container-low);
+  --sidebar-foreground: var(--md-on-surface);
+  --sidebar-primary: var(--md-primary);
+  --sidebar-primary-foreground: var(--md-on-primary);
+  --sidebar-accent: var(--md-secondary-container);
+  --sidebar-accent-foreground: var(--md-on-secondary-container);
+  --sidebar-border: var(--md-outline-variant);
+  --sidebar-ring: var(--md-primary);
+}
