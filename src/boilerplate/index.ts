@@ -15,3 +15,8 @@ export { default as UserSettings, type AppUser } from "./layouts/UserSettings"
 export { default as PageNotFound } from "./pages/PageNotFound"
 export type { NavItem } from "./config/nav"
 export { Logger, levels, setLogUserId, type LogObject } from "./utils/logger"
+export {
+  configureAnalytics, consoleAdapter, identifyUser, init as initAnalytics,
+  reset as resetAnalytics, trackEvents, trackPageView,
+} from "./utils/analytics"
+export { Events, type AnalyticsAdapter, type EventName, type EventProperties, type IdentifyUserArgs } from "./utils/analytics.types"

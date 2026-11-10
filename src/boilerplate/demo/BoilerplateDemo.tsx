@@ -12,6 +12,11 @@ import SpinnerButton from "../common/SpinnerButton"
 import type { NavItem } from "../config/nav"
 import AppShell from "../layouts/AppShell"
 import PageNotFound from "../pages/PageNotFound"
+import { configureAnalytics, consoleAdapter, trackEvents } from "../utils/analytics"
+import { Events } from "../utils/analytics.types"
+
+// Demo only: log analytics calls to the console even in dev.
+configureAnalytics({ adapters: [consoleAdapter], enabled: true })
 
 const base = "/boilerplate"
 const home: NavItem = { name: "Landing Page", Icon: AnchorIcon, to: base }
@@ -33,6 +38,7 @@ function HomePage() {
       <ActionButtonGroup>
         <Button asChild variant="outline"><Link to={`${base}/missing`}>Go to a missing page</Link></Button>
         <SpinnerButton isLoading={busy} onClick={() => { setBusy(true); setTimeout(() => setBusy(false), 1500) }}>Save (1.5s)</SpinnerButton>
+        <Button variant="secondary" onClick={() => trackEvents(Events.SIGNUP, { plan: "pro" })}>Track event</Button>
         <Button variant="secondary" onClick={() => addAlert({ type: "success", message: "Saved successfully" })}>Success alert</Button>
         <Button variant="secondary" onClick={() => addAlert({ type: "error", message: "Something broke" })}>Error alert</Button>
       </ActionButtonGroup>
