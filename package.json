@@ -10,6 +10,7 @@
     "lint": "oxlint && eslint",
     "lint:fix": "oxlint && eslint --fix",
     "check:gallery": "node scripts/check-gallery.mjs",
+    "check:theme": "node scripts/check-theme.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "preview": "vite preview"
   },

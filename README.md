@@ -34,21 +34,20 @@ npm run dev
 `src/theme.css` is the only place visual values are defined. Components never hard-code colors, radii, fonts or easing. Swap the whole look by replacing that file with another that defines the same variables. Two examples live in `src/themes`: copy `src/themes/ocean.css` over `src/theme.css` to use it.
 
 
-To make your own, copy `src/themes/violet.css`, edit it and use it as `src/theme.css`. The gallery's theme preview shows the two bundled example themes across every component without touching `theme.css`.
+## Make your own theme
 
-## What you can change
+Nobody has to hand-write one. A theme is five seed hues plus fonts, shapes and motion, and `npm run check:theme` validates the result (every variable present, light and dark both defined, WCAG contrast). So hand the job to an AI assistant; it reads [`AGENTS.md`](AGENTS.md) and [`docs/theming.md`](docs/theming.md) on its own:
 
-| Group | Variables | Notes |
-| --- | --- | --- |
-| Seed hues | `--hue-primary`, `--hue-secondary`, `--hue-tertiary`, `--hue-error`, `--hue-neutral` | oklch hue angles; the tonal colors below are derived from them |
-| Color roles | `--md-primary`, `--md-on-primary`, `--md-primary-container`, `--md-surface`, `--md-surface-container-*`, `--md-on-surface`, `--md-outline`, ... | The full M3 role set. Overwrite any of them directly for exact colors. |
-| Typography | `--typeface-sans`, `--typeface-heading`, `--typeface-mono` | Load fonts with an `@import` at the top of the theme file (the themes use Fontsource) |
-| Shape | `--shape-xs` to `--shape-xl`, `--shape-full` | `--shape-full` makes pills |
-| Motion | `--motion-easing-standard`, `--motion-easing-emphasized`, `--motion-easing-accelerate`, `--motion-duration-short`, `--motion-duration-medium`, `--motion-duration-long` | Used for every transition |
-| Elevation | `--elevation-0` to `--elevation-3`, `--md-shadow` | |
-| Layout | `--layout-appbar-height`, `--layout-sidebar-width`, `--layout-sidebar-width-collapsed` | App shell dimensions |
+```text
+Create a new m3 theme called "forest".
+Read docs/theming.md first and follow "Create a theme".
+Brand: deep green with warm amber accents. Mood: calm. Typeface: keep Geist. Corners: very round.
+Write src/themes/forest.css, then run `npm run check:theme -- src/themes/forest.css` and fix every error until it passes.
+```
 
-The color roles are defined for light mode in `:root` and redefined inside `@media (prefers-color-scheme: dark)`. The shadcn variables (`--background`, `--primary`, `--border`, ...) are mapped onto the M3 roles at the bottom of the file, so shadcn components pick up your theme automatically.
+Every file in `src/themes` shows up in the gallery's "Theme preview" section automatically, so you can try it across all components before applying it. Applying it is copying the file over `src/theme.css`.
+
+The full spec (every variable, the color role recipe, exact-brand-color overrides, what the validator checks) is in [`docs/theming.md`](docs/theming.md). Dark mode follows the system preference, and the theme defines both modes.
 
 ## Using the tokens in your own code
 
@@ -84,6 +83,7 @@ Components live in `src/components/ui` and are yours to edit. For a one-off, pas
 | `npm run lint` | oxlint (correctness) plus ESLint (ordering rules) |
 | `npm run lint:fix` | Same, applying auto-fixes (import order) |
 | `npm run check:gallery` | Fails if a component in `src/components/ui` or a component/util in `src/boilerplate` has no gallery section |
+| `npm run check:theme` | Validates `src/theme.css` and every file in `src/themes`: required variables, light and dark, contrast (`--verbose` prints every ratio) |
 
 Code conventions enforced by ESLint on hand-written code (shadcn-generated files are excluded):
 
@@ -92,6 +92,10 @@ Code conventions enforced by ESLint on hand-written code (shadcn-generated files
 - No `console` outside `src/boilerplate/utils/logger.ts`; use `Logger`
 
 TypeScript 7 runs `tsc`. typescript-eslint doesn't support TS 7 yet, so the `typescript` package name is aliased to the TS 6 API for ESLint only (see `package.json`). Remove the alias once typescript-eslint supports it.
+
+## For AI assistants
+
+[`AGENTS.md`](AGENTS.md) holds the conventions, commands and repo map (Claude Code reads it through `CLAUDE.md`; Cursor, Codex and Copilot read `AGENTS.md`). [`llms.txt`](llms.txt) is an index of the docs and key files for LLM tools. Theme work is specified in [`docs/theming.md`](docs/theming.md).
 
 ## License
 

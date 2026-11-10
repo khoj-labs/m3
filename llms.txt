@@ -1,0 +1,25 @@
+# m3
+
+> Material Design 3 components for React, built on shadcn/ui (Radix) and Tailwind CSS v4, with an application boilerplate. Every color, radius, font and motion value comes from one CSS file (src/theme.css), so the whole look changes by replacing that file.
+
+Assistants: read AGENTS.md first (conventions, commands, where things live), then docs/theming.md before creating or editing a theme. Validate themes with `npm run check:theme`.
+
+## Docs
+
+- [AGENTS.md](https://github.com/khoj-labs/m3/blob/main/AGENTS.md): rules, commands, repo map and common tasks for AI assistants
+- [Theming spec](https://github.com/khoj-labs/m3/blob/main/docs/theming.md): variable reference, color role recipe, how to create a theme, validation
+- [README](https://github.com/khoj-labs/m3/blob/main/README.md): overview, how to override the theme and the boilerplate, credits, license
+
+## Source
+
+- [src/theme.css](https://github.com/khoj-labs/m3/blob/main/src/theme.css): the active theme (all colors, radii, fonts, motion, elevation, layout)
+- [src/themes](https://github.com/khoj-labs/m3/tree/main/src/themes): alternative themes (violet, ocean)
+- [src/index.css](https://github.com/khoj-labs/m3/blob/main/src/index.css): maps theme variables to Tailwind utilities
+- [src/components/ui](https://github.com/khoj-labs/m3/tree/main/src/components/ui): all components (shadcn-generated and 11 hand-built)
+- [src/boilerplate](https://github.com/khoj-labs/m3/tree/main/src/boilerplate): app shell, page header, list page, error boundary, route guard, logger, analytics, http client, cache, error codes
+- [src/gallery](https://github.com/khoj-labs/m3/tree/main/src/gallery): every component in all variants and states (route /gallery)
+- [scripts/check-theme.mjs](https://github.com/khoj-labs/m3/blob/main/scripts/check-theme.mjs): theme validator (variables, light and dark, WCAG contrast)
+
+## Optional
+
+- [LICENSE](https://github.com/khoj-labs/m3/blob/main/LICENSE): Apache License 2.0

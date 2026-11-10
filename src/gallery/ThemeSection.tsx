@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Typography } from "@/components/ui/typography"
-import ocean from "@/themes/ocean.css?inline"
-import violet from "@/themes/violet.css?inline"
 import { Row, Section } from "./Section"
 
 /**
  * Preview-only: injects a theme file after src/theme.css so it overrides it.
  * With nothing selected, the page shows src/theme.css exactly as it is.
+ * Every file in src/themes appears here automatically (no code change needed).
  */
-const themes = { ocean, violet } as const
-type ThemeName = keyof typeof themes
+const files = import.meta.glob<string>("../themes/*.css", { eager: true, import: "default", query: "?inline" })
+const themes: Record<string, string> = Object.fromEntries(
+  Object.entries(files)
+    .map(([path, css]) => [path.split("/").pop()!.replace(/\.css$/, ""), css] as const)
+    .sort(([a], [b]) => a.localeCompare(b))
+)
+type ThemeName = string
 
-function useThemePreview(name: ThemeName | "") {
+function useThemePreview(name: ThemeName) {
   useEffect(() => {
     const id = "theme-preview"
     document.getElementById(id)?.remove()
@@ -38,15 +42,14 @@ const swatches = [
 ]
 
 export function ThemeSection() {
-  const [theme, setTheme] = useState<ThemeName | "">("")
+  const [theme, setTheme] = useState<ThemeName>("")
   useThemePreview(theme)
 
   return (
     <Section name="theme" title="Theme preview">
       <Row label="Preview a theme across every component below">
-        <ToggleGroup type="single" variant="outline" value={theme} onValueChange={(v) => setTheme(v as ThemeName | "")}>
-          <ToggleGroupItem value="violet">violet</ToggleGroupItem>
-          <ToggleGroupItem value="ocean">ocean</ToggleGroupItem>
+        <ToggleGroup type="single" variant="outline" value={theme} onValueChange={setTheme}>
+          {Object.keys(themes).map((name) => <ToggleGroupItem key={name} value={name}>{name}</ToggleGroupItem>)}
         </ToggleGroup>
       </Row>
       <Row label="Color roles" className="gap-4">
