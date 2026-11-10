@@ -94,11 +94,11 @@ export function CommonSections() {
 
   const snippet = [
     "<PageHeader",
-    `  title="${title}"`,
+    `  title=${title}`,
     `  Icon={${found ? toPascal(iconName) : "X"}}`,
     subtitle && `  subtitle="${subtitle}"`,
-    withCreate && '  createLink="/new"',
-    withCrumbs && '  breadcrumbs={[{ icon: <House />, label: "Home", href: "/" }, { label: "Details", href: "/details" }]}',
+    withCreate && `  createLink="/add-new"`,
+    withCrumbs && `  breadcrumbs={[{ icon: <House />, label: "Home", href: "/" }, { icon: <${found ? toPascal(iconName) : "X"} />, label: "${title}", href: "/list" }]}`,
     "/>",
   ].filter(Boolean).join("\n")
 
@@ -144,7 +144,7 @@ export function CommonSections() {
             Icon={Icon}
             subtitle={subtitle || undefined}
             createLink={withCreate ? "#PageHeader" : undefined}
-            breadcrumbs={withCrumbs ? [{ href: "#PageHeader", icon: <HouseIcon />, label: "Home" }, { href: "#details", label: "Details" }] : undefined}
+            breadcrumbs={withCrumbs ? [{ href: "#PageHeader", icon: <HouseIcon />, label: "Home" }, { href: "#details", icon: <Icon />, label: title }] : undefined}
           />
           <div className="mt-6 flex flex-col gap-2"><Skeleton className="h-4 w-2/3" /><Skeleton className="h-4 w-1/2" /><Skeleton className="h-4 w-3/5" /></div>
         </div>
