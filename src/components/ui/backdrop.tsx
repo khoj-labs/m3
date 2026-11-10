@@ -1,6 +1,6 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+import * as React from "react"
 
 const backdropVariants = cva(
   "fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-(--motion-duration-medium) ease-standard",
@@ -30,9 +30,9 @@ function Backdrop({
   ...props
 }: Omit<React.ComponentProps<"div">, "open"> &
   Omit<VariantProps<typeof backdropVariants>, "open"> & {
-    open?: boolean
     /** Transparent, but still blocks interaction (like MUI `invisible`). */
     invisible?: boolean
+    open?: boolean
   }) {
   return (
     <div

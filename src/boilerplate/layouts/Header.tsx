@@ -1,9 +1,9 @@
 import { AppBar, AppBarActions, AppBarTitle } from "@/components/ui/app-bar"
 import type { NavItem } from "../config/nav"
-import UserSettings, { type AppUser } from "./UserSettings"
 import { useSideNav } from "./SideNav"
+import UserSettings, { type AppUser } from "./UserSettings"
 
-export default function Header({ title, user, userMenu }: { title?: string; user?: AppUser; userMenu: NavItem[] }) {
+export default function Header({ title, user, userMenu }: { userMenu: NavItem[]; title?: string; user?: AppUser }) {
   const { isFullNav } = useSideNav()
   return (
     <AppBar

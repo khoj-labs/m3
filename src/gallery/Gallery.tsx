@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import { Toaster } from "@/components/ui/sonner"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Typography } from "@/components/ui/typography"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import violet from "@/themes/violet.css?inline"
 import ocean from "@/themes/ocean.css?inline"
-import { FormSections } from "./FormSections"
+import violet from "@/themes/violet.css?inline"
 import { DisplaySections } from "./DisplaySections"
+import { FormSections } from "./FormSections"
 import { OverlaySections } from "./OverlaySections"
 
 /**

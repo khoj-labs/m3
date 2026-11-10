@@ -1,7 +1,7 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 import { Slot } from "radix-ui"
+import * as React from "react"
 
 /** M3 type scale. Each variant has a sensible default element (see `defaultTag`). */
 const typographyVariants = cva("m-0", {

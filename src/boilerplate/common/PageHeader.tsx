@@ -1,19 +1,19 @@
+import { cn } from "cn"
 import type { LucideIcon } from "lucide-react"
 import { Link } from "react-router-dom"
-import { cn } from "cn"
 import { Button } from "@/components/ui/button"
 import { Typography } from "@/components/ui/typography"
 import BreadcrumbsNavigation, { type TBreadcrumb } from "./BreadcrumbsNavigation"
 
 type Props = {
   title: string
-  subtitle?: string
-  Icon?: LucideIcon
-  /** Shows a "Create New" button linking here. */
-  createLink?: string
-  createLabel?: string
   breadcrumbs?: TBreadcrumb[]
   className?: string
+  createLabel?: string
+  /** Shows a "Create New" button linking here. */
+  createLink?: string
+  Icon?: LucideIcon
+  subtitle?: string
 }
 
 export default function PageHeader({ title, subtitle, Icon, createLink, createLabel = "Create New", breadcrumbs, className }: Props) {

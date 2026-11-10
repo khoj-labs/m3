@@ -5,9 +5,9 @@ import Spinner from "./Spinner"
 type Props = {
   /** Supply these from whatever auth you use; this component knows nothing about it. */
   isAuthenticated: boolean
-  isLoading?: boolean
   redirectTo: string
   children?: ReactNode
+  isLoading?: boolean
 }
 
 /** Auth-agnostic route guard (replaces the Auth0-bound original). */

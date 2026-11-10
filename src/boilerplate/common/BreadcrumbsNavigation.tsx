@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 
-export type TBreadcrumb = { icon?: ReactNode; label: string; href: string }
+export type TBreadcrumb = { href: string; label: string; icon?: ReactNode }
 
 export default function BreadcrumbsNavigation({ items }: { items: TBreadcrumb[] }) {
   return (

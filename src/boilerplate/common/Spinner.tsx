@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority"
-import { Loader2Icon } from "lucide-react"
 import { cn } from "cn"
+import { Loader2Icon } from "lucide-react"
 
 const spinnerVariants = cva("animate-spin text-primary", {
   variants: { size: { sm: "size-4", default: "size-8", lg: "size-12" } },

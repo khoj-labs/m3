@@ -1,20 +1,20 @@
-import type { ReactNode } from "react"
 import type { LucideIcon } from "lucide-react"
+import type { ReactNode } from "react"
 import { List, ListItem } from "@/components/ui/list"
 import EmptyState from "./EmptyState"
 import PageHeader from "./PageHeader"
 import Spinner from "./Spinner"
 
 type Props<T> = {
-  title: string
-  Icon?: LucideIcon
-  createLink?: string
-  list: T[] | null | undefined
   isLoading: boolean
+  list: T[] | null | undefined
+  title: string
+  createLink?: string
+  emptyState?: ReactNode
+  getKey?: (item: T, index: number) => string
+  Icon?: LucideIcon
   /** Defaults to String(item). */
   renderItem?: (item: T) => ReactNode
-  getKey?: (item: T, index: number) => string
-  emptyState?: ReactNode
 }
 
 /** PageHeader + loading / empty / list states. */

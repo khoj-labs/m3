@@ -3,11 +3,11 @@ import { PackageOpenIcon } from "lucide-react"
 import { Typography } from "@/components/ui/typography"
 
 type Props = {
-  title?: string
-  description?: string
-  Icon?: LucideIcon
   /** e.g. a call-to-action Button */
   action?: React.ReactNode
+  description?: string
+  Icon?: LucideIcon
+  title?: string
 }
 
 /** Themed placeholder; replaces the original's two hard-coded-colour SVG illustrations. */

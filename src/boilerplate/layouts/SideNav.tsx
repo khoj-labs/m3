@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { createContext, useContext } from "react"
 import { NavLink } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { List, ListItem, ListItemIcon } from "@/components/ui/list"
@@ -8,7 +8,6 @@ import type { NavItem } from "../config/nav"
 
 type SideNavState = { isFullNav: boolean; setIsFullNav: (v: boolean) => void }
 export const SideNavCtx = createContext<SideNavState>({ isFullNav: false, setIsFullNav: () => {} })
-// eslint-disable-next-line react-refresh/only-export-components
 export const useSideNav = () => useContext(SideNavCtx)
 
 type Props = {

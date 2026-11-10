@@ -1,7 +1,7 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 import { Slot } from "radix-ui"
+import * as React from "react"
 
 const fabVariants = cva(
   "inline-flex shrink-0 items-center justify-center gap-2 font-medium whitespace-nowrap shadow-elevation-3 transition-[box-shadow,background-color,transform] duration-(--motion-duration-short) ease-standard outline-none select-none hover:shadow-elevation-2 focus-visible:ring-3 focus-visible:ring-ring/50 active:scale-95 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6",
@@ -43,9 +43,9 @@ function Fab({
   ...props
 }: React.ComponentProps<"button"> &
   Omit<VariantProps<typeof fabVariants>, "extended"> & {
+    asChild?: boolean
     /** Show a text label next to the icon. */
     extended?: boolean
-    asChild?: boolean
   }) {
   const Comp = asChild ? Slot.Root : "button"
   return (

@@ -1,5 +1,5 @@
-import React, { type ErrorInfo, type ReactNode } from "react"
 import { HomeIcon, TriangleAlertIcon } from "lucide-react"
+import React, { type ErrorInfo, type ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 import { Typography } from "@/components/ui/typography"
 
@@ -7,9 +7,9 @@ type Props = {
   children?: ReactNode
   /** Replace the default fallback UI. */
   fallback?: ReactNode
+  homeHref?: string
   /** Hook for your logger / error tracker. Defaults to console.error. */
   onError?: (error: Error, info: ErrorInfo) => void
-  homeHref?: string
   supportEmail?: string
 }
 

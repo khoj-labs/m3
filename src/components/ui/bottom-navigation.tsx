@@ -1,7 +1,7 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 import { Tabs as TabsPrimitive } from "radix-ui"
+import * as React from "react"
 
 const bottomNavigationVariants = cva(
   "flex h-20 w-full items-stretch justify-around gap-2 bg-md-surface-container px-2 pt-3 pb-4",
@@ -24,9 +24,9 @@ function BottomNavigation({
   ...props
 }: Omit<React.ComponentProps<typeof TabsPrimitive.List>, "defaultValue"> &
   VariantProps<typeof bottomNavigationVariants> & {
-    value?: string
     defaultValue?: string
     onValueChange?: (value: string) => void
+    value?: string
   }) {
   return (
     <TabsPrimitive.Root value={value} defaultValue={defaultValue} onValueChange={onValueChange} activationMode="manual">
@@ -52,8 +52,8 @@ function BottomNavigationItem({
 }: Omit<React.ComponentProps<typeof TabsPrimitive.Trigger>, "children"> & {
   icon: React.ReactNode
   label: string
-  showLabel?: boolean
   badge?: React.ReactNode
+  showLabel?: boolean
 }) {
   return (
     <TabsPrimitive.Trigger

@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import Gallery from "@/gallery/Gallery"
 import BoilerplateDemo from "@/boilerplate/demo/BoilerplateDemo"
+import Gallery from "@/gallery/Gallery"
 
 export default function App() {
   return (

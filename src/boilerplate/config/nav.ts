@@ -1,8 +1,8 @@
 import type { LucideIcon } from "lucide-react"
 
 export type NavItem = {
-  name: string
   Icon: LucideIcon
+  name: string
   /** Router path. */
   to: string
   /** Shows a "Create New" button in PageHeader when set. */

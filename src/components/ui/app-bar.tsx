@@ -1,6 +1,6 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+import * as React from "react"
 
 const appBarVariants = cva("z-40 flex w-full items-center gap-2 px-4 transition-[background-color,box-shadow] duration-(--motion-duration-medium) ease-standard", {
   variants: {

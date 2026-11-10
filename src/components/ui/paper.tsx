@@ -1,7 +1,7 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 import { Slot } from "radix-ui"
+import * as React from "react"
 
 /** A plain surface. Elevation is expressed through tonal surface + shadow tokens. */
 const paperVariants = cva("text-foreground transition-shadow", {

@@ -1,6 +1,6 @@
-import * as React from "react"
-import { ChevronRightIcon, ChevronLeftIcon, ChevronsRightIcon, ChevronsLeftIcon } from "lucide-react"
 import { cn } from "cn"
+import { ChevronRightIcon, ChevronLeftIcon, ChevronsRightIcon, ChevronsLeftIcon } from "lucide-react"
+import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Paper } from "@/components/ui/paper"
@@ -9,11 +9,11 @@ type TransferItem = { id: string; label: string; disabled?: boolean }
 
 type TransferListProps = Omit<React.ComponentProps<"div">, "onChange" | "defaultValue"> & {
   items: TransferItem[]
-  /** ids currently in the right-hand list */
-  value?: string[]
   defaultValue?: string[]
   onValueChange?: (value: string[]) => void
   titles?: [string, string]
+  /** ids currently in the right-hand list */
+  value?: string[]
 }
 
 function TransferList({

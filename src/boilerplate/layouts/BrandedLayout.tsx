@@ -2,9 +2,9 @@ import type { ReactNode } from "react"
 import { AppBar, AppBarLeading } from "@/components/ui/app-bar"
 
 type Props = {
-  logo?: ReactNode
-  footer?: ReactNode
   children: ReactNode
+  footer?: ReactNode
+  logo?: ReactNode
 }
 
 /** Chrome for logged-out / marketing-style pages (the original `BrandingBorder`). */

@@ -1,7 +1,7 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { StarIcon } from "lucide-react"
 import { cn } from "cn"
+import { StarIcon } from "lucide-react"
+import * as React from "react"
 
 const ratingVariants = cva("inline-flex items-center gap-0.5 text-md-primary", {
   variants: {
@@ -16,16 +16,16 @@ const ratingVariants = cva("inline-flex items-center gap-0.5 text-md-primary", {
 
 type RatingProps = Omit<React.ComponentProps<"div">, "onChange" | "defaultValue"> &
   VariantProps<typeof ratingVariants> & {
-    value?: number | null
     defaultValue?: number
-    onValueChange?: (value: number) => void
+    disabled?: boolean
+    emptyIcon?: React.ReactNode
+    icon?: React.ReactNode
     max?: number
+    onValueChange?: (value: number) => void
     /** 1 = whole stars, 0.5 = half stars */
     precision?: 1 | 0.5
     readOnly?: boolean
-    disabled?: boolean
-    icon?: React.ReactNode
-    emptyIcon?: React.ReactNode
+    value?: number | null
   }
 
 /**

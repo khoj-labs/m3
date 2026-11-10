@@ -1,7 +1,7 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { CheckIcon, XIcon } from "lucide-react"
 import { cn } from "cn"
+import { CheckIcon, XIcon } from "lucide-react"
+import * as React from "react"
 
 const stepperVariants = cva("flex", {
   variants: {
@@ -15,17 +15,17 @@ const stepperVariants = cva("flex", {
 
 type StepDef = {
   label: string
-  description?: string
-  optional?: boolean
-  error?: boolean
   completed?: boolean
   /** Rendered under the active step in vertical orientation. */
   content?: React.ReactNode
+  description?: string
+  error?: boolean
+  optional?: boolean
 }
 
 type StepStatus = "complete" | "active" | "error" | "upcoming"
 
-function StepIndicator({ status, index }: { status: StepStatus; index: number }) {
+function StepIndicator({ status, index }: { index: number; status: StepStatus }) {
   return (
     <span
       data-slot="step-indicator"
@@ -52,8 +52,8 @@ function Stepper({
   ...props
 }: Omit<React.ComponentProps<"ol">, "children"> &
   VariantProps<typeof stepperVariants> & {
-    steps: StepDef[]
     activeStep: number
+    steps: StepDef[]
     /** Makes steps clickable (non-linear stepper). */
     onStepClick?: (index: number) => void
   }) {

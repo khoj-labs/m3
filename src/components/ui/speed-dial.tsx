@@ -1,7 +1,7 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { PlusIcon } from "lucide-react"
 import { cn } from "cn"
+import { PlusIcon } from "lucide-react"
+import * as React from "react"
 import { Fab } from "@/components/ui/fab"
 
 const actionsVariants = cva("absolute flex items-center gap-3", {
@@ -16,16 +16,16 @@ const actionsVariants = cva("absolute flex items-center gap-3", {
   defaultVariants: { direction: "up" },
 })
 
-type SpeedDialAction = { key: string; icon: React.ReactNode; label: string; onSelect?: () => void }
+type SpeedDialAction = { icon: React.ReactNode; key: string; label: string; onSelect?: () => void }
 
 type SpeedDialProps = Omit<React.ComponentProps<"div">, "onChange"> &
   VariantProps<typeof actionsVariants> & {
     actions: SpeedDialAction[]
-    open?: boolean
-    defaultOpen?: boolean
-    onOpenChange?: (open: boolean) => void
-    icon?: React.ReactNode
     "aria-label"?: string
+    defaultOpen?: boolean
+    icon?: React.ReactNode
+    onOpenChange?: (open: boolean) => void
+    open?: boolean
     /** Open on hover as well as click/focus. */
     openOnHover?: boolean
   }

@@ -9,12 +9,12 @@ import type { AppUser } from "./UserSettings"
 type Props = {
   nav: NavItem[]
   userMenu: NavItem[]
-  user?: AppUser
-  logo?: ReactNode
-  logoCollapsed?: ReactNode
-  headerTitle?: string
   /** Defaults to <Outlet /> so it can be used as a layout route. */
   children?: ReactNode
+  headerTitle?: string
+  logo?: ReactNode
+  logoCollapsed?: ReactNode
+  user?: AppUser
 }
 
 /**
