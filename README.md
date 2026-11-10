@@ -21,7 +21,7 @@ npm run dev
 | Route | What it shows |
 | --- | --- |
 | `/gallery` | Every component, all variants and states, with a theme preview switcher |
-| `/boilerplate` | The boilerplate in three groups (Components, Page components, Utils), each section with a live playground and a copyable usage snippet: build a PageHeader from textboxes, fetch into a ListPage, trigger alerts and error boundaries, inspect logger/analytics/http/cache calls |
+| `/boilerplate` | The boilerplate in three tabbed groups (Components, Page components, Utils), built with m3's own App Bar, Tabs, Bottom Navigation, List, Paper and FAB. Each section has a live playground and a copyable usage snippet: build a PageHeader from textboxes, fetch into a ListPage, trigger alerts and error boundaries, inspect logger/analytics/http/cache calls |
 
 ## Overriding the theme
 

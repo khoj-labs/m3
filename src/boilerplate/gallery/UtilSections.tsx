@@ -19,7 +19,6 @@ import { CacheKeys, type CacheKey } from "../utils/constants"
 import { ApiError, ErrorCodes, errorCodeFromStatus, isApiError } from "../utils/errorCodes"
 import http from "../utils/http"
 import { Logger, onLog, setLogUserId, type Level, type LogEntry } from "../utils/logger"
-import GroupHeading from "./GroupHeading"
 import Snippet from "./Snippet"
 
 const Pre = ({ children }: { children: React.ReactNode }) => (
@@ -122,8 +121,6 @@ export function UtilsGroup() {
 
   return (
     <>
-      <GroupHeading id="utils" index={3} title="Utils" description="Non-visual helpers: logging, analytics, errors, http and storage." />
-
       <Section name="logger" title="logger">
         <div className="grid items-end gap-4 sm:grid-cols-[1fr_9rem_1fr_auto]">
           <Field id="lg-code" label="Error code"><Input id="lg-code" value={logCode} onChange={(e) => setLogCode(e.target.value)} /></Field>

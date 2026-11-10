@@ -8,7 +8,6 @@ import BreadcrumbsNavigation from "../common/BreadcrumbsNavigation"
 import Spinner from "../common/Spinner"
 import SpinnerButton from "../common/SpinnerButton"
 import Frame from "./Frame"
-import GroupHeading from "./GroupHeading"
 import Snippet from "./Snippet"
 
 export function ComponentsGroup() {
@@ -17,8 +16,6 @@ export function ComponentsGroup() {
 
   return (
     <>
-      <GroupHeading id="components" index={1} title="Components" description="Small building blocks you can drop into any page." />
-
       <Section name="Spinner" title="Spinner">
         <Row label="Sizes">
           <Spinner size="sm" className="w-auto py-0" />

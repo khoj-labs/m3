@@ -21,7 +21,6 @@ import PageNotFound from "../pages/PageNotFound"
 import { isApiError } from "../utils/errorCodes"
 import http from "../utils/http"
 import Frame from "./Frame"
-import GroupHeading from "./GroupHeading"
 import Snippet from "./Snippet"
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -100,8 +99,6 @@ export function PageComponentsGroup() {
 
   return (
     <>
-      <GroupHeading id="page-components" index={2} title="Page components" description="Page-level pieces: layout chrome, headers, states and route guards." />
-
       <Section name="Header" title="Header">
         <Frame className="h-24"><Header title="Header" user={{ name: "Ada Lovelace" }} userMenu={menu} /></Frame>
         <Snippet code={`// Reads the side-nav state, so render it inside <AppShell> (or a SideNavCtx.Provider)
