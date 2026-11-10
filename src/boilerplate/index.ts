@@ -15,7 +15,7 @@ export { default as SideNav, useSideNav } from "./layouts/SideNav"
 export { default as UserSettings, type AppUser } from "./layouts/UserSettings"
 export { default as PageNotFound } from "./pages/PageNotFound"
 export type { NavItem } from "./config/nav"
-export { Logger, levels, setLogUserId, type LogObject } from "./utils/logger"
+export { Logger, levels, onLog, setLogUserId, type LogObject } from "./utils/logger"
 export {
   configureAnalytics, consoleAdapter, identifyUser, init as initAnalytics,
   reset as resetAnalytics, trackEvents, trackPageView,

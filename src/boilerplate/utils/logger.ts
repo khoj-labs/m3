@@ -42,7 +42,22 @@ export function setLogUserId(userId: string) {
 
 const isSilent = () => import.meta.env.MODE === 'test'
 
+type LogEntry = { args: unknown; logObject: LogObject }
+type LogListener = (entry: LogEntry) => void
+
+const listeners = new Set<LogListener>()
+
+/** Subscribe to every log call (e.g. to forward to Sentry/Datadog or show logs in a UI). Returns an unsubscribe. */
+export function onLog(listener: LogListener) {
+  listeners.add(listener)
+  return () => { listeners.delete(listener) }
+}
+
 function emit(logObject: LogObject, args?: unknown) {
+  listeners.forEach((listener) => {
+    try { listener({ args, logObject }) }
+    catch { /* a broken sink must never break logging */ }
+  })
   if (isSilent()) return
   console[logObject.level](logObject, args)
 }
