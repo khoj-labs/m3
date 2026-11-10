@@ -22,3 +22,4 @@ export {
 } from "./utils/analytics"
 export { Events, type AnalyticsAdapter, type EventName, type EventProperties, type IdentifyUserArgs } from "./utils/analytics.types"
 export { ApiError, ErrorCodes, errorCodeFromStatus, fallbackMessage, isApiError } from "./utils/errorCodes"
+export { default as http, configureHttp } from "./utils/http"

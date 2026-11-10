@@ -27,7 +27,7 @@ const write = (key: string, value: string) => {
   catch { /* storage unavailable (private mode, SSR) — logging must never throw */ }
 }
 
-function getSessionId() {
+export function getSessionId() {
   const existing = read(logStorageKeys.sessionId)
   if (existing) return existing
   const created = crypto.randomUUID()
