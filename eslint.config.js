@@ -22,6 +22,8 @@ export default tseslint.config(
     plugins: { '@typescript-eslint': tseslint.plugin, 'import-x': importX },
     settings: { 'import-x/resolver-next': [createTypeScriptImportResolver()] },
     rules: {
+      // Only utils/logger.ts may touch the console; everything else uses Logger.
+      'no-console': 'error',
       // Props/type members: required first, then optional; each block alphabetical.
       '@typescript-eslint/member-ordering': ['error', {
         interfaces: { memberTypes: 'never', optionalityOrder: 'required-first', order: 'alphabetically-case-insensitive' },
@@ -37,4 +39,5 @@ export default tseslint.config(
       }],
     },
   },
+  { files: ['src/boilerplate/utils/logger.ts'], rules: { 'no-console': 'off' } },
 )
