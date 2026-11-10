@@ -40,6 +40,11 @@
   --motion-duration-medium: 220ms;
   --motion-duration-long: 380ms;
 
+  /* ── Layout (app shell dimensions) ───────────────────────── */
+  --layout-appbar-height: 4rem;
+  --layout-sidebar-width: 15rem;
+  --layout-sidebar-width-collapsed: 4.5rem;
+
   /* ── Elevation (uses --md-shadow) ────────────────────────── */
   --elevation-0: none;
   --elevation-1: 0 1px 2px var(--md-shadow), 0 1px 3px 1px var(--md-shadow);
