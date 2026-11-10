@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react"
 import { toast } from "sonner"
 import { Toaster } from "@/components/ui/sonner"
+import { ErrorCodes } from "../utils/errorCodes"
 import { Logger } from "../utils/logger"
 
 export type AppAlert = {
@@ -11,7 +12,7 @@ export type AppAlert = {
 type Ctx = { addAlert: (alert: AppAlert) => void }
 
 const AppAlertsCtx = createContext<Ctx>({
-  addAlert: (alert) => Logger.warn("ALERTS-NO-PROVIDER: addAlert called outside <AppAlerts>", alert),
+  addAlert: (alert) => Logger.warn(`${ErrorCodes.common.missingProvider} (addAlert outside <AppAlerts>)`, alert),
 })
 
 /**

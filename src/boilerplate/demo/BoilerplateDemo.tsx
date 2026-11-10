@@ -3,9 +3,11 @@ import { useState } from "react"
 import { Link, Route, Routes } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { Typography } from "@/components/ui/typography"
 import ActionButtonGroup from "../common/ActionButtonGroup"
 import { useAppAlerts } from "../common/AppAlerts"
 import AppAlerts from "../common/AppAlerts"
+import ErrorBoundary from "../common/ErrorBoundary"
 import ListPage from "../common/ListPage"
 import PageHeader from "../common/PageHeader"
 import SpinnerButton from "../common/SpinnerButton"
@@ -14,6 +16,8 @@ import AppShell from "../layouts/AppShell"
 import PageNotFound from "../pages/PageNotFound"
 import { configureAnalytics, consoleAdapter, trackEvents } from "../utils/analytics"
 import { Events } from "../utils/analytics.types"
+import { ApiError } from "../utils/errorCodes"
+import { Logger } from "../utils/logger"
 
 // Demo only: log analytics calls to the console even in dev.
 configureAnalytics({ adapters: [consoleAdapter], enabled: true })
@@ -24,9 +28,14 @@ const connections: NavItem = { name: "Connections", Icon: CableIcon, to: `${base
 const settings: NavItem = { name: "Settings", Icon: SettingsIcon, to: `${base}/settings` }
 const logout: NavItem = { name: "Logout", Icon: LogOutIcon, to: `${base}/logout` }
 
+function Bomb(): React.ReactNode {
+  throw new Error("Demo render error")
+}
+
 function HomePage() {
   const { addAlert } = useAppAlerts()
   const [busy, setBusy] = useState(false)
+  const [crash, setCrash] = useState(false)
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -41,7 +50,10 @@ function HomePage() {
         <Button variant="secondary" onClick={() => trackEvents(Events.SIGNUP, { plan: "pro" })}>Track event</Button>
         <Button variant="secondary" onClick={() => addAlert({ type: "success", message: "Saved successfully" })}>Success alert</Button>
         <Button variant="secondary" onClick={() => addAlert({ type: "error", message: "Something broke" })}>Error alert</Button>
+        <Button variant="secondary" onClick={() => { const e = new ApiError(404, "Connection not found"); Logger.error(e.code, e); addAlert({ type: "error", message: `${e.message} (${e.status})` }) }}>API 404</Button>
+        <Button variant="destructive" onClick={() => setCrash(true)}>Crash a child</Button>
       </ActionButtonGroup>
+      <ErrorBoundary homeHref={base} supportEmail="help@example.com">{crash ? <Bomb /> : <Typography tone="muted">Press “Crash a child” to see the ErrorBoundary fallback.</Typography>}</ErrorBoundary>
     </div>
   )
 }

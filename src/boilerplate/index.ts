@@ -2,6 +2,7 @@ export { default as ActionButtonGroup } from "./common/ActionButtonGroup"
 export { default as AppAlerts, useAppAlerts } from "./common/AppAlerts"
 export { default as BreadcrumbsNavigation, type TBreadcrumb } from "./common/BreadcrumbsNavigation"
 export { default as EmptyState } from "./common/EmptyState"
+export { default as ErrorBoundary } from "./common/ErrorBoundary"
 export { default as ListPage } from "./common/ListPage"
 export { default as PageHeader } from "./common/PageHeader"
 export { default as PrivateRoute } from "./common/PrivateRoute"
@@ -20,3 +21,4 @@ export {
   reset as resetAnalytics, trackEvents, trackPageView,
 } from "./utils/analytics"
 export { Events, type AnalyticsAdapter, type EventName, type EventProperties, type IdentifyUserArgs } from "./utils/analytics.types"
+export { ApiError, ErrorCodes, errorCodeFromStatus, fallbackMessage, isApiError } from "./utils/errorCodes"
