@@ -1,23 +1,23 @@
 # m3
+Material Design 3 components for React
 
-Material Design 3 components for React, built on [shadcn/ui](https://ui.shadcn.com) and Tailwind CSS v4.
+# What
+1. m3 takes the 30 shadcn/ui components that map to Material UI's core set
+2. adds the 11 that shadcn doesn't ship (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper)
+3. restyles all of them with M3 design tokens: tonal surface colors, pill and large radii, and a shared motion curve.
+4. Adds every color, radius, font and easing value in **one file**, `src/theme.css`; you can change the look of the whole library by replacing that file.
+5. Adds application boilerplate (`src/boilerplate`) from react-gold-tsx - page header, app shell with collapsible side nav, error boundary, logger, analytics facade, HTTP client, dark mode support
 
-m3 takes the 30 shadcn/ui components that map to Material UI's core set, adds the 11 that shadcn doesn't ship (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper), and restyles all of them with M3 design tokens: tonal surface colors, pill and large radii, and a shared motion curve. Every color, radius, font and easing value lives in **one file**, `src/theme.css`, so you can change the look of the whole library by replacing that file.
-
-It also includes a small application boilerplate (`src/boilerplate`): page header, app shell with collapsible side nav, error boundary, logger, analytics facade, HTTP client and more.
-
+# Demo
 - **43 components** in `src/components/ui`, all shown in every variant and state at `/gallery`
 - **Dark mode** follows the system preference, with no toggle or class needed
 - **Two example themes** (`violet`, `ocean`) that prove the theme swap works
-- Components are source files you own (the shadcn model), not a package you import
 
-## Getting started
-
+# Getting Started
 ```sh
 npm install
 npm run dev
 ```
-
 | Route | What it shows |
 | --- | --- |
 | `/gallery` | Every component, all variants and states, with a theme preview switcher |
