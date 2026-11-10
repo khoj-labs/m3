@@ -27,14 +27,9 @@ npm run dev
 
 ### Replace the theme file
 
-`src/theme.css` is the only place visual values are defined. Components never hard-code colors, radii, fonts or easing. Swap the whole look by replacing that file with another that defines the same variables:
+`src/theme.css` is the only place visual values are defined. Components never hard-code colors, radii, fonts or easing. Swap the whole look by replacing that file with another that defines the same variables. Two examples live in `src/themes`: copy `src/themes/ocean.css` over `src/theme.css` to use it.
 
-```sh
-npm run theme -- ocean    # copies src/themes/ocean.css over src/theme.css
-npm run theme -- violet   # back to the default
-```
-
-To make your own, copy `src/themes/violet.css` to `src/themes/<name>.css`, edit it, and run `npm run theme -- <name>`. The gallery's theme switcher previews the two bundled example themes without touching `theme.css`.
+To make your own, copy `src/themes/violet.css`, edit it and use it as `src/theme.css`. The gallery's theme preview shows the two bundled example themes across every component without touching `theme.css`.
 
 ### What you can change
 
@@ -82,7 +77,6 @@ Components live in `src/components/ui` and are yours to edit. For a one-off, pas
 | `npm run lint` | oxlint (correctness) plus ESLint (ordering rules) |
 | `npm run lint:fix` | Same, applying auto-fixes (import order) |
 | `npm run check:gallery` | Fails if a component in `src/components/ui` or a component/util in `src/boilerplate` has no gallery section |
-| `npm run theme -- <name>` | Swap `src/theme.css` for `src/themes/<name>.css` |
 
 Code conventions enforced by ESLint on hand-written code (shadcn-generated files are excluded):
 

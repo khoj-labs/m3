@@ -7,16 +7,16 @@ import { Row, Section } from "./Section"
 
 /**
  * Preview-only: injects a theme file after src/theme.css so it overrides it.
- * In a real project you swap by replacing src/theme.css (npm run theme -- ocean).
+ * With nothing selected, the page shows src/theme.css exactly as it is.
  */
-const themes = { default: "", ocean, violet } as const
+const themes = { ocean, violet } as const
 type ThemeName = keyof typeof themes
 
-function useThemePreview(name: ThemeName) {
+function useThemePreview(name: ThemeName | "") {
   useEffect(() => {
     const id = "theme-preview"
     document.getElementById(id)?.remove()
-    if (!themes[name]) return
+    if (!name) return
     const el = document.createElement("style")
     el.id = id
     el.textContent = themes[name]
@@ -38,18 +38,17 @@ const swatches = [
 ]
 
 export function ThemeSection() {
-  const [theme, setTheme] = useState<ThemeName>("default")
+  const [theme, setTheme] = useState<ThemeName | "">("")
   useThemePreview(theme)
 
   return (
     <Section name="theme" title="Theme preview">
       <Row label="Preview a theme across every component below">
-        <ToggleGroup type="single" variant="outline" value={theme} onValueChange={(v) => v && setTheme(v as ThemeName)}>
-          <ToggleGroupItem value="default">theme.css</ToggleGroupItem>
+        <ToggleGroup type="single" variant="outline" value={theme} onValueChange={(v) => setTheme(v as ThemeName | "")}>
           <ToggleGroupItem value="violet">violet</ToggleGroupItem>
           <ToggleGroupItem value="ocean">ocean</ToggleGroupItem>
         </ToggleGroup>
-        <Typography variant="caption" tone="muted">Temporary. To apply one for real: <code>npm run theme -- ocean</code></Typography>
+        <Typography variant="caption" tone="muted">Temporary. Click the selected theme again to go back to src/theme.css.</Typography>
       </Row>
       <Row label="Color roles" className="gap-4">
         {swatches.map(({ className, label }) => (

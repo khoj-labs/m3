@@ -3,7 +3,7 @@
  *
  * The single source of truth for every color, radius, font and motion value.
  * Swap the look of the whole app by replacing src/theme.css with another file
- * that defines these same variables (see src/themes/*.css, scripts/set-theme.mjs).
+ * that defines these same variables (see src/themes/*.css).
  * Components never hard-code visual values; they read these via index.css.
  */
 @import "@fontsource-variable/geist";

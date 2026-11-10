@@ -8,7 +8,6 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint && eslint",
     "lint:fix": "oxlint && eslint --fix",
-    "theme": "node scripts/set-theme.mjs",
     "check:gallery": "node scripts/check-gallery.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "preview": "vite preview"
