@@ -1,6 +1,8 @@
 # m3
 Material Design 3 components for React
 
+<img width="250" height="150" alt="" src="https://github.com/user-attachments/assets/93bc64d6-3211-4a81-a95b-2c89c6c6e870" /> 
+
 # What
 1. m3 takes the 30 shadcn/ui components that map to Material UI's core set
 2. adds the 11 that shadcn doesn't ship (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper)
@@ -9,29 +11,32 @@ Material Design 3 components for React
 5. Adds application boilerplate (`src/boilerplate`) from react-gold-tsx - page header, app shell with collapsible side nav, error boundary, logger, analytics facade, HTTP client, dark mode support
 
 # Demo
-- **43 components** in `src/components/ui`, all shown in every variant and state at `/gallery`
-- **Dark mode** follows the system preference, with no toggle or class needed
-- **Two example themes** (`violet`, `ocean`) that prove the theme swap works
 
-# Getting Started
+
+## Component Library
+https://github.com/user-attachments/assets/c3e20539-caab-4683-a1f0-0e45645a58f8
+
+
+
+## App Boilerplate
+https://github.com/user-attachments/assets/9d23c14e-d071-4e78-9a60-893d93c448cf
+
+
 ```sh
 npm install
 npm run dev
 ```
-| Route | What it shows |
-| --- | --- |
-| `/gallery` | Every component, all variants and states, with a theme preview switcher |
-| `/boilerplate` | The boilerplate in three tabbed groups (Components, Page components, Utils), built with m3's own App Bar, Tabs, Bottom Navigation, List, Paper and FAB. Each section has a live playground and a copyable usage snippet: build a PageHeader from textboxes, fetch into a ListPage, trigger alerts and error boundaries, inspect logger/analytics/http/cache calls |
 
-## Overriding the theme
+# Overriding the theme
 
-### Replace the theme file
+## Replace the theme file
 
-`src/theme.css` is the only place visual values are defined. Components never hard-code colors, radii, fonts or easing. Swap the whole look by replacing that file with another that defines the same variables. Two examples live in `src/themes`: copy `src/themes/ocean.css` over `src/theme.css` to use it.
+`src/theme.css` is the only place visual values are defined. Components never hard-code colors, radii, fonts or easing. Swap the whole look by replacing that file with another that defines the same variables:
+
 
 To make your own, copy `src/themes/violet.css`, edit it and use it as `src/theme.css`. The gallery's theme preview shows the two bundled example themes across every component without touching `theme.css`.
 
-### What you can change
+## What you can change
 
 | Group | Variables | Notes |
 | --- | --- | --- |
@@ -45,7 +50,7 @@ To make your own, copy `src/themes/violet.css`, edit it and use it as `src/theme
 
 The color roles are defined for light mode in `:root` and redefined inside `@media (prefers-color-scheme: dark)`. The shadcn variables (`--background`, `--primary`, `--border`, ...) are mapped onto the M3 roles at the bottom of the file, so shadcn components pick up your theme automatically.
 
-### Using the tokens in your own code
+## Using the tokens in your own code
 
 `src/index.css` exposes the tokens as Tailwind utilities:
 
@@ -53,11 +58,11 @@ The color roles are defined for light mode in `:root` and redefined inside `@med
 <div className="bg-md-primary-container text-md-on-primary-container rounded-xl shadow-elevation-2 ease-emphasized" />
 ```
 
-### Overriding a single component
+## Overriding a single component
 
 Components live in `src/components/ui` and are yours to edit. For a one-off, pass `className`. Note that re-running `npx shadcn add <name> --overwrite` replaces the shadcn-generated files, so keep deep edits to the hand-built components (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper), or restyle through the theme instead.
 
-### Overriding the boilerplate
+## Overriding the boilerplate
 
 | To change | Use |
 | --- | --- |
