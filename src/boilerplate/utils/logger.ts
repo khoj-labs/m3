@@ -42,7 +42,7 @@ export function setLogUserId(userId: string) {
 
 const isSilent = () => import.meta.env.MODE === 'test'
 
-type LogEntry = { args: unknown; logObject: LogObject }
+export type LogEntry = { args: unknown; logObject: LogObject }
 type LogListener = (entry: LogEntry) => void
 
 const listeners = new Set<LogListener>()

@@ -21,7 +21,7 @@ npm run dev
 | Route | What it shows |
 | --- | --- |
 | `/gallery` | Every component, all variants and states, with a theme preview switcher |
-| `/boilerplate` | The app boilerplate in action (shell, list states, alerts, error boundary, analytics) |
+| `/boilerplate` | Every boilerplate component and utility with interactive playgrounds: build a PageHeader from textboxes, fetch into a ListPage, trigger alerts and error boundaries, inspect logger/analytics/http/cache calls |
 
 ## Overriding the theme
 
@@ -81,7 +81,7 @@ Components live in `src/components/ui` and are yours to edit. For a one-off, pas
 | `npm run typecheck` | Typecheck the app (`tsc --noEmit -p tsconfig.app.json`) |
 | `npm run lint` | oxlint (correctness) plus ESLint (ordering rules) |
 | `npm run lint:fix` | Same, applying auto-fixes (import order) |
-| `npm run check:gallery` | Fails if a component in `src/components/ui` has no gallery section |
+| `npm run check:gallery` | Fails if a component in `src/components/ui` or a component/util in `src/boilerplate` has no gallery section |
 | `npm run theme -- <name>` | Swap `src/theme.css` for `src/themes/<name>.css` |
 
 Code conventions enforced by ESLint on hand-written code (shadcn-generated files are excluded):

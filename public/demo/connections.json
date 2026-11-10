@@ -1,0 +1,6 @@
+[
+  { "name": "Postgres", "type": "Database" },
+  { "name": "Stripe", "type": "Payments" },
+  { "name": "Slack", "type": "Messaging" },
+  { "name": "GitHub", "type": "Source control" }
+]

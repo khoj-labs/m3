@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { Toaster } from "@/components/ui/sonner"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -36,7 +37,10 @@ export default function Gallery() {
     <TooltipProvider>
       <div className="mx-auto max-w-5xl px-4 pb-24">
         <header className="sticky top-0 z-30 -mx-4 flex flex-wrap items-center justify-between gap-3 border-b border-border bg-background/90 px-4 py-3 backdrop-blur">
-          <Typography variant="title">Component gallery</Typography>
+          <div className="flex items-baseline gap-4">
+            <Typography variant="title">Component gallery</Typography>
+            <Link to="/boilerplate" className="text-sm text-primary underline-offset-4 hover:underline">Boilerplate gallery →</Link>
+          </div>
           <div className="flex items-center gap-2">
             <Typography variant="caption" tone="muted">Theme preview</Typography>
             <ToggleGroup type="single" variant="outline" size="sm" value={theme} onValueChange={(v) => v && setTheme(v as ThemeName)}>
