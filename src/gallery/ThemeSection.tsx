@@ -51,9 +51,9 @@ export function ThemeSection() {
       </Row>
       <Row label="Color roles" className="gap-4">
         {swatches.map(({ className, label }) => (
-          <div key={label} className="flex w-24 flex-col items-center gap-1.5 text-center">
+          <div key={label} className="flex w-24 flex-col items-center gap-1.5 self-start text-center">
             <span className={`h-12 w-full rounded-lg border border-md-outline-variant ${className}`} />
-            <Typography variant="caption" tone="muted">{label}</Typography>
+            <Typography variant="caption" tone="muted" className="h-8">{label}</Typography>
           </div>
         ))}
       </Row>
