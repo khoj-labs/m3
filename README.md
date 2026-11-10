@@ -21,7 +21,7 @@ npm run dev
 | Route | What it shows |
 | --- | --- |
 | `/gallery` | Every component, all variants and states, with a theme preview switcher |
-| `/boilerplate` | Every boilerplate component and utility with interactive playgrounds: build a PageHeader from textboxes, fetch into a ListPage, trigger alerts and error boundaries, inspect logger/analytics/http/cache calls |
+| `/boilerplate` | The boilerplate in three groups (Components, Page components, Utils), each section with a live playground and a copyable usage snippet: build a PageHeader from textboxes, fetch into a ListPage, trigger alerts and error boundaries, inspect logger/analytics/http/cache calls |
 
 ## Overriding the theme
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,6 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Typography } from "@/components/ui/typography"
 import { Section, Row } from "@/gallery/Section"
+import ErrorBoundary from "../common/ErrorBoundary"
 import { configureAnalytics, identifyUser, init, reset, trackEvents, trackPageView } from "../utils/analytics"
 import { Events, type AnalyticsAdapter, type EventName } from "../utils/analytics.types"
 import { baseUrl } from "../utils/apiUrls"
@@ -17,6 +19,8 @@ import { CacheKeys, type CacheKey } from "../utils/constants"
 import { ApiError, ErrorCodes, errorCodeFromStatus, isApiError } from "../utils/errorCodes"
 import http from "../utils/http"
 import { Logger, onLog, setLogUserId, type Level, type LogEntry } from "../utils/logger"
+import GroupHeading from "./GroupHeading"
+import Snippet from "./Snippet"
 
 const Pre = ({ children }: { children: React.ReactNode }) => (
   <pre className="max-h-64 overflow-auto rounded-lg bg-md-surface-container-high p-3 text-xs">{children}</pre>
@@ -33,9 +37,13 @@ function Field({ children, id, label }: { children: React.ReactNode; id: string;
   )
 }
 
+function Bomb(): React.ReactNode {
+  throw new Error("Demo render error")
+}
+
 type AnalyticsCall = { name: string; payload?: unknown }
 
-export function UtilSections() {
+export function UtilsGroup() {
   // logger
   const [entries, setEntries] = useState<LogEntry[]>([])
   const [logCode, setLogCode] = useState("DEMO-CODE: Something happened")
@@ -49,6 +57,12 @@ export function UtilSections() {
   const [eventName, setEventName] = useState<EventName>(Events.SIGNUP)
   const [props, setProps] = useState('{"plan":"pro"}')
   const [analyticsUser, setAnalyticsUser] = useState("ada")
+
+  // ErrorBoundary
+  const [crashDefault, setCrashDefault] = useState(false)
+  const [crashCustom, setCrashCustom] = useState(false)
+  const [resetKey, setResetKey] = useState(0)
+  const [caught, setCaught] = useState("")
 
   // errorCodes
   const [statusText, setStatusText] = useState("404")
@@ -108,6 +122,8 @@ export function UtilSections() {
 
   return (
     <>
+      <GroupHeading id="utils" index={3} title="Utils" description="Non-visual helpers: logging, analytics, errors, http and storage." />
+
       <Section name="logger" title="logger">
         <div className="grid items-end gap-4 sm:grid-cols-[1fr_9rem_1fr_auto]">
           <Field id="lg-code" label="Error code"><Input id="lg-code" value={logCode} onChange={(e) => setLogCode(e.target.value)} /></Field>
@@ -126,6 +142,9 @@ export function UtilSections() {
         </Row>
         <Typography variant="caption" tone="muted">Entries below come from onLog(); the same entry is also written to the browser console.</Typography>
         <Pre>{entries.length ? json(entries) : "No entries yet. Press Log."}</Pre>
+        <Snippet code={`Logger.error("API-404: Not found", error)   // code first, details second
+setLogUserId(user.id)                       // attribute later logs to a user
+const stop = onLog(({ logObject, args }) => sendToSentry(logObject, args))`} />
       </Section>
 
       <Section name="analytics" title="analytics">
@@ -150,6 +169,11 @@ export function UtilSections() {
           <Button variant="outline" onClick={reset}>reset</Button>
         </Row>
         <Pre>{calls.length ? json(calls) : "No calls recorded yet."}</Pre>
+        <Snippet code={`configureAnalytics({ adapters: [posthogAdapter] })  // enabled outside dev by default
+init()
+identifyUser({ userId: user.id, set: { plan: "pro" } })
+trackEvents(Events.SIGNUP, { plan: "pro" })
+trackPageView()`} />
       </Section>
 
       <Section name="errorCodes" title="errorCodes">
@@ -166,6 +190,42 @@ export function UtilSections() {
           <TableHeader><TableRow><TableHead>Group</TableHead><TableHead>Key</TableHead><TableHead>Value</TableHead></TableRow></TableHeader>
           <TableBody>{codeRows.map((r) => <TableRow key={`${r.group}.${r.key}`}><TableCell>{r.group}</TableCell><TableCell>{r.key}</TableCell><TableCell>{r.value}</TableCell></TableRow>)}</TableBody>
         </Table>
+        <Snippet code={`throw new ApiError(404, "Connection not found")   // .status = 404, .code = "API-404: Not found"
+errorCodeFromStatus(503)                         // "API-5XX: Server error"
+if (isApiError(error)) Logger.error(error.code, error)`} />
+      </Section>
+
+      <Section name="ErrorBoundary" title="ErrorBoundary">
+        <Row label="Default fallback / custom fallback + onError">
+          <Button variant="destructive" onClick={() => setCrashDefault(true)}>Crash (default)</Button>
+          <Button variant="destructive" onClick={() => setCrashCustom(true)}>Crash (custom)</Button>
+          <Button variant="outline" onClick={() => { setCrashDefault(false); setCrashCustom(false); setCaught(""); setResetKey((k) => k + 1) }}>Reset</Button>
+        </Row>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-xl border border-border p-4">
+            <ErrorBoundary key={`d${resetKey}`} homeHref="#ErrorBoundary" supportEmail="help@example.com">
+              {crashDefault ? <Bomb /> : <Typography tone="muted">Healthy child. Press “Crash (default)”.</Typography>}
+            </ErrorBoundary>
+          </div>
+          <div className="rounded-xl border border-border p-4">
+            <ErrorBoundary
+              key={`c${resetKey}`}
+              fallback={<Alert variant="destructive"><AlertTitle>Custom fallback</AlertTitle><AlertDescription>This widget crashed; the rest of the page is fine.</AlertDescription></Alert>}
+              onError={(error) => setCaught(error.message)}
+            >
+              {crashCustom ? <Bomb /> : <Typography tone="muted">Healthy child. Press “Crash (custom)”.</Typography>}
+            </ErrorBoundary>
+            {caught && <Typography variant="caption" tone="muted" className="mt-2 block">onError received: {caught}</Typography>}
+          </div>
+        </div>
+        <Snippet code={`<ErrorBoundary
+  homeHref="/"
+  supportEmail="help@example.com"
+  fallback={<MyFallback />}                 // optional
+  onError={(error, info) => report(error)}  // optional; defaults to Logger.error
+>
+  <App />
+</ErrorBoundary>`} />
       </Section>
 
       <Section name="http" title="http">
@@ -180,6 +240,9 @@ export function UtilSections() {
         </div>
         <Typography variant="caption" tone="muted">Sends X-Request-ID, X-Session-ID and, if you saved one in the cache section under “token”, a bearer token. Failures throw ApiError.</Typography>
         <Pre>{response || "No response yet."}</Pre>
+        <Snippet code={`configureHttp({ baseUrl: "https://api.example.com", getToken: () => session.token })
+const connections = await http.get<Connection[]>("/connections")
+await http.post("/connections", { name: "Postgres" })   // throws ApiError on failure`} />
       </Section>
 
       <Section name="apiUrls" title="apiUrls">
@@ -190,6 +253,8 @@ export function UtilSections() {
             <TableRow><TableCell>apiUrls.status</TableCell><TableCell>{apiUrls.status}</TableCell></TableRow>
           </TableBody>
         </Table>
+        <Snippet code={`import apiUrls from "./utils/apiUrls"
+const status = await http.get(apiUrls.status)   // base from VITE_API_HOST`} />
       </Section>
 
       <Section name="cache" title="cache">
@@ -214,6 +279,11 @@ export function UtilSections() {
           <TableHeader><TableRow><TableHead>Key</TableHead><TableHead>Stored value</TableHead></TableRow></TableHeader>
           <TableBody>{Object.values(CacheKeys).map((k) => <TableRow key={k}><TableCell>{k}</TableCell><TableCell>{retrieve(k) ?? "(empty)"}</TableCell></TableRow>)}</TableBody>
         </Table>
+        <Snippet code={`save(CacheKeys.token, "abc")
+retrieve(CacheKeys.token)                    // "abc" | null
+saveJson(CacheKeys.profileSrc, { a: 1 })
+retrieveJson<Profile>(CacheKeys.profileSrc)  // parsed value | null (logs on bad JSON)
+remove(CacheKeys.token)`} />
       </Section>
 
       <Section name="constants" title="constants">
@@ -222,6 +292,7 @@ export function UtilSections() {
           <TableHeader><TableRow><TableHead>CacheKeys.</TableHead><TableHead>Value</TableHead></TableRow></TableHeader>
           <TableBody>{Object.entries(CacheKeys).map(([k, v]) => <TableRow key={k}><TableCell>{k}</TableCell><TableCell>{v}</TableCell></TableRow>)}</TableBody>
         </Table>
+        <Snippet code={`CacheKeys.userId   // "user-id": one place for every localStorage key`} />
       </Section>
     </>
   )
