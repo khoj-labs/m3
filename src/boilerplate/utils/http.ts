@@ -1,15 +1,17 @@
+import { retrieve } from "./cache"
+import { CacheKeys } from "./constants"
 import { ApiError, fallbackMessage } from "./errorCodes"
 import { getSessionId, Logger } from "./logger"
 
 type HttpConfig = {
   /** Prepended to relative URLs, e.g. "https://api.example.com". */
   baseUrl: string
-  /** Return the bearer token (or null when signed out). Called on every request. */
+  /** Return the bearer token (or null when signed out). Defaults to CacheKeys.token in localStorage. */
   getToken: () => string | null | Promise<string | null>
   timeoutMs: number
 }
 
-const config: HttpConfig = { baseUrl: "", getToken: () => null, timeoutMs: 30_000 }
+const config: HttpConfig = { baseUrl: "", getToken: () => retrieve(CacheKeys.token), timeoutMs: 30_000 }
 
 export function configureHttp(options: Partial<HttpConfig>) {
   Object.assign(config, options)

@@ -18,6 +18,8 @@ export const ErrorCodes = {
     validation: 'API-422: Validation failed',
   },
   common: {
+    cacheParse: 'COM-CACHE-PARSE: Stored value is not valid JSON',
+    cacheWrite: 'COM-CACHE-WRITE: Could not write to storage',
     missingProvider: 'COM-NO-PROVIDER: Hook used outside its provider',
     uncaughtException: 'COM-ALL-EXP: Uncaught Exception',
   },

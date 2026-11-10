@@ -23,3 +23,6 @@ export {
 export { Events, type AnalyticsAdapter, type EventName, type EventProperties, type IdentifyUserArgs } from "./utils/analytics.types"
 export { ApiError, ErrorCodes, errorCodeFromStatus, fallbackMessage, isApiError } from "./utils/errorCodes"
 export { default as http, configureHttp } from "./utils/http"
+export { remove, retrieve, retrieveJson, save, saveJson } from "./utils/cache"
+export { CacheKeys, type CacheKey } from "./utils/constants"
+export { default as apiUrls, baseUrl } from "./utils/apiUrls"
