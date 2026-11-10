@@ -6,9 +6,9 @@ Material Design 3 components for React
 # What
 1. m3 takes the 30 shadcn/ui components that map to Material UI's core set
 2. adds the 11 that shadcn doesn't ship (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper)
-3. restyles all of them with M3 design tokens: tonal surface colors, pill and large radii, and a shared motion curve.
+3. restyles all of them with M3 design tokens: tonal surface colors, pill and large radii, and a shared motion curve. Dark mode follows the system preference.
 4. Adds every color, radius, font and easing value in **one file**, `src/theme.css`; you can change the look of the whole library by replacing that file.
-5. Adds application boilerplate (`src/boilerplate`) from react-gold-tsx - page header, app shell with collapsible side nav, error boundary, logger, analytics facade, HTTP client, dark mode support
+5. Adds application boilerplate (`src/boilerplate`) from react-gold-tsx - page header, list page, empty and 404 pages, app shell with collapsible side nav, route guard, alerts, error boundary, and utilities: logger, analytics facade, HTTP client, localStorage cache and keys, API error codes
 
 # Demo
 
@@ -31,7 +31,7 @@ npm run dev
 
 ## Replace the theme file
 
-`src/theme.css` is the only place visual values are defined. Components never hard-code colors, radii, fonts or easing. Swap the whole look by replacing that file with another that defines the same variables:
+`src/theme.css` is the only place visual values are defined. Components never hard-code colors, radii, fonts or easing. Swap the whole look by replacing that file with another that defines the same variables. Two examples live in `src/themes`: copy `src/themes/ocean.css` over `src/theme.css` to use it.
 
 
 To make your own, copy `src/themes/violet.css`, edit it and use it as `src/theme.css`. The gallery's theme preview shows the two bundled example themes across every component without touching `theme.css`.
@@ -68,7 +68,9 @@ Components live in `src/components/ui` and are yours to edit. For a one-off, pas
 | --- | --- |
 | API base URL | `VITE_API_HOST` (see `.env.example`) and `configureHttp({ baseUrl, getToken, timeoutMs })` |
 | Analytics provider | `configureAnalytics({ adapters: [yourAdapter] })`; an adapter is five methods (`init`, `identify`, `pageView`, `reset`, `track`) |
-| Error handling | `<ErrorBoundary fallback onError homeHref supportEmail>`; add your own groups to `ErrorCodes` |
+| Error handling | `<ErrorBoundary fallback onError homeHref supportEmail>`; add your own groups to `ErrorCodes`; `http` throws `ApiError` (use `errorCodeFromStatus` to map a status to a code) |
+| Logging | `Logger.error(code, details)` (also `info`, `warn`); `setLogUserId(id)` attributes later logs to a user; `onLog(listener)` forwards every entry to your own sink (Sentry, Datadog, ...) |
+| Storage | Keys live in `CacheKeys`; read and write through `save`, `retrieve`, `saveJson`, `retrieveJson` and `remove` |
 | Navigation | Pass `NavItem[]` to `<AppShell nav userMenu />` |
 | Auth | `<PrivateRoute isAuthenticated isLoading redirectTo />` is auth-agnostic; bring your own provider |
 
@@ -90,6 +92,10 @@ Code conventions enforced by ESLint on hand-written code (shadcn-generated files
 - No `console` outside `src/boilerplate/utils/logger.ts`; use `Logger`
 
 TypeScript 7 runs `tsc`. typescript-eslint doesn't support TS 7 yet, so the `typescript` package name is aliased to the TS 6 API for ESLint only (see `package.json`). Remove the alias once typescript-eslint supports it.
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
 
 ## Credits
 
