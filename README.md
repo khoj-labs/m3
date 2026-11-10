@@ -1,6 +1,8 @@
 # m3
 Material Design 3 components for React
 
+<img width="250" height="150" alt="" src="https://github.com/user-attachments/assets/93bc64d6-3211-4a81-a95b-2c89c6c6e870" /> 
+
 # What
 1. m3 takes the 30 shadcn/ui components that map to Material UI's core set
 2. adds the 11 that shadcn doesn't ship (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper)
