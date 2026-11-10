@@ -76,10 +76,6 @@ Code conventions enforced by ESLint on hand-written code (shadcn-generated files
 
 TypeScript 7 runs `tsc`. typescript-eslint doesn't support TS 7 yet, so the `typescript` package name is aliased to the TS 6 API for ESLint only (see `package.json`). Remove the alias once typescript-eslint supports it.
 
-## For AI assistants
-
-[`AGENTS.md`](AGENTS.md) holds the conventions, commands and repo map (Claude Code reads it through `CLAUDE.md`; Cursor, Codex and Copilot read `AGENTS.md`). [`llms.txt`](llms.txt) is an index of the docs and key files for LLM tools. Theme work is specified in [`docs/theming.md`](docs/theming.md).
-
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE).
