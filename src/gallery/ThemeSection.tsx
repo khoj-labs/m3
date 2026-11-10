@@ -48,7 +48,6 @@ export function ThemeSection() {
           <ToggleGroupItem value="violet">violet</ToggleGroupItem>
           <ToggleGroupItem value="ocean">ocean</ToggleGroupItem>
         </ToggleGroup>
-        <Typography variant="caption" tone="muted">Temporary. Click the selected theme again to go back to src/theme.css.</Typography>
       </Row>
       <Row label="Color roles" className="gap-4">
         {swatches.map(({ className, label }) => (
