@@ -65,7 +65,7 @@ export default function Gallery() {
           <AppBarLeading>
             <span aria-hidden className="grid size-10 place-items-center rounded-full bg-md-primary-container text-md-on-primary-container"><BoxesIcon className="size-5" /></span>
           </AppBarLeading>
-          <AppBarTitle>m3 gallery</AppBarTitle>
+          <AppBarTitle>M3</AppBarTitle>
         </AppBar>
 
         <div className="mx-auto max-w-6xl px-4 pt-4 pb-28 md:pb-12">

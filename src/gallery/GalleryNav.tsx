@@ -1,3 +1,4 @@
+import { ChevronRightIcon } from "lucide-react"
 import { Fragment, useEffect, useState } from "react"
 import { List, ListItem, ListItemText, ListSubheader } from "@/components/ui/list"
 
@@ -10,6 +11,7 @@ type Group = { items: { id: string; title: string }[]; name: string }
 export function GalleryNav({ tab }: { tab: string }) {
   const [groups, setGroups] = useState<Group[]>([])
   const [active, setActive] = useState("")
+  const [open, setOpen] = useState<Set<string>>(new Set()) // collapsed by default
 
   useEffect(() => {
     let observer: IntersectionObserver | undefined
@@ -54,18 +56,37 @@ export function GalleryNav({ tab }: { tab: string }) {
   return (
     <nav aria-label="Components" className="max-h-[calc(100vh-6rem)] overflow-y-auto">
       <List dense>
-        {groups.map(({ items, name }) => (
-          <Fragment key={name}>
-            {groups.length > 1 && <ListSubheader>{name}</ListSubheader>}
-            {items.map(({ id, title }) => (
-              <ListItem key={id} asChild selected={active === id}>
-                <a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }) }}>
-                  <ListItemText primary={title} className="[&>span]:text-sm" />
-                </a>
-              </ListItem>
-            ))}
-          </Fragment>
-        ))}
+        {groups.map(({ items, name }) => {
+          // A lone group has nothing to collapse into, so its items always show.
+          const collapsible = groups.length > 1
+          const expanded = !collapsible || open.has(name)
+          const holdsActive = items.some((item) => item.id === active)
+          return (
+            <Fragment key={name}>
+              {collapsible && (
+                <ListSubheader className="px-0 pt-1 pb-0">
+                  <button
+                    type="button"
+                    aria-expanded={expanded}
+                    onClick={() => setOpen((prev) => { const next = new Set(prev); if (!next.delete(name)) next.add(name); return next })}
+                    className="flex w-full items-center gap-1 rounded-full px-4 py-2 text-left text-sm font-medium outline-none hover:bg-md-surface-container-high focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <ChevronRightIcon aria-hidden className={`size-4 transition-transform duration-(--motion-duration-short) ease-standard ${expanded ? "rotate-90" : ""}`} />
+                    <span className="flex-1">{name}</span>
+                    {!expanded && holdsActive && <span aria-label="contains the section in view" className="size-1.5 rounded-full bg-md-primary" />}
+                  </button>
+                </ListSubheader>
+              )}
+              {expanded && items.map(({ id, title }) => (
+                <ListItem key={id} asChild selected={active === id}>
+                  <a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }) }}>
+                    <ListItemText primary={title} className="[&>span]:text-sm" />
+                  </a>
+                </ListItem>
+              ))}
+            </Fragment>
+          )
+        })}
       </List>
     </nav>
   )
