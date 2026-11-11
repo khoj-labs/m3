@@ -14,14 +14,14 @@ If the user asks about the repo as a whole ("tldr this", "tell me everything", "
 
 | Command | Purpose |
 | --- | --- |
-| `npm run dev` | Dev server. Look at `/gallery` (components) and `/boilerplate` (boilerplate). |
+| `npm run dev` | Dev server. Look at `/gallery`: tabs for Components, Page components and Utils. |
 | `npm run lint` / `npm run lint:fix` | oxlint (correctness) + ESLint (ordering rules). `lint:fix` fixes import order. |
 | `npm run typecheck` | `tsc --noEmit -p tsconfig.app.json` |
 | `npm run build` | Typecheck + production build |
 | `npm run check:gallery` | Every component and boilerplate util must have a gallery section |
 | `npm run check:theme` | Validates `src/theme.css` and `src/themes/*.css` (variables, light + dark, contrast) |
 
-**Done means** lint, typecheck, build, `check:gallery` and `check:theme` all pass. There is no test runner; verify UI changes in the browser at `/gallery` and `/boilerplate`.
+**Done means** lint, typecheck, build, `check:gallery` and `check:theme` all pass. There is no test runner; verify UI changes in the browser at `/gallery`.
 
 ## Where things live
 
@@ -33,7 +33,7 @@ src/components/ui/            all components (shadcn-generated + 11 hand-built)
 src/gallery/                  /gallery: one <Section name="<file name>"> per ui component, plus ThemeSection
 src/boilerplate/common|layouts|pages/   boilerplate components
 src/boilerplate/utils/        logger, analytics, errorCodes, http, apiUrls, cache, constants
-src/boilerplate/gallery/      /boilerplate: tabbed gallery; EmbedRoutes.tsx serves the iframe demos
+src/boilerplate/gallery/      section files for the Page components and Utils tabs and the boilerplate blocks in the Components tab; EmbedRoutes.tsx serves the iframe demos
 scripts/                      check-gallery.mjs, check-theme.mjs
 docs/theming.md               theme spec and recipe
 ```

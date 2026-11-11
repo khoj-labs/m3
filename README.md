@@ -27,7 +27,7 @@ npm install
 npm run dev
 ```
 
-Then open `/gallery` (every component, all variants and states) and `/boilerplate` (app shell, page components, utilities).
+Then open `/gallery`: every component in all variants and states, plus tabs for the boilerplate's page components and utilities.
 
 # Overriding the theme
 

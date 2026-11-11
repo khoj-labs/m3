@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Typography } from "@/components/ui/typography"
 import { Row, Section } from "./Section"
@@ -16,7 +16,8 @@ const themes: Record<string, string> = Object.fromEntries(
 )
 type ThemeName = string
 
-function useThemePreview(name: ThemeName) {
+/** Lives in the page (not the section) so the preview survives switching tabs. */
+export function useThemePreview(name: ThemeName) {
   useEffect(() => {
     const id = "theme-preview"
     document.getElementById(id)?.remove()
@@ -41,14 +42,11 @@ const swatches = [
   { className: "bg-md-outline", label: "outline" },
 ]
 
-export function ThemeSection() {
-  const [theme, setTheme] = useState<ThemeName>("")
-  useThemePreview(theme)
-
+export function ThemeSection({ theme, onThemeChange }: { onThemeChange: (name: ThemeName) => void; theme: ThemeName }) {
   return (
     <Section name="theme" title="Theme preview">
       <Row label="Preview a theme across every component below">
-        <ToggleGroup type="single" variant="outline" value={theme} onValueChange={setTheme}>
+        <ToggleGroup type="single" variant="outline" value={theme} onValueChange={onThemeChange}>
           {Object.keys(themes).map((name) => <ToggleGroupItem key={name} value={name}>{name}</ToggleGroupItem>)}
         </ToggleGroup>
       </Row>
