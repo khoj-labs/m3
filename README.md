@@ -44,7 +44,7 @@ Write src/themes/<name>.css, then run `npm run check:theme -- src/themes/<name>.
 
 For example: name `forest`, brand "deep green with warm amber accents", mood "calm", typeface "keep Geist", corners "very round".
 
-Every file in `src/themes` shows up in the gallery's "Theme preview" section automatically, so you can try it across all components before applying it. To apply it, ask the assistant to copy it over `src/theme.css`, which is the only place visual values are defined. The full spec is in [`docs/theming.md`](docs/theming.md).
+Every file in `src/themes` shows up in the gallery's "Preview" section automatically, so you can try it across all components before applying it. To apply it, ask the assistant to copy it over `src/theme.css`, which is the only place visual values are defined. The full spec is in [`docs/theming.md`](docs/theming.md).
 
 ## Overriding the boilerplate
 

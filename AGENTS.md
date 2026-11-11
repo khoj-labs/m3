@@ -69,6 +69,6 @@ docs/theming.md               theme spec and recipe
 
 ## Common tasks
 
-- **New theme:** follow `docs/theming.md` ("Create a theme"), then `npm run check:theme -- src/themes/<name>.css`. It appears in the gallery's Theme preview automatically.
+- **New theme:** follow `docs/theming.md` ("Create a theme"), then `npm run check:theme -- src/themes/<name>.css`. It appears in the gallery's "Preview" section automatically.
 - **Apply a theme:** copy `src/themes/<name>.css` over `src/theme.css` (the bundled themes are `violet.css`, the default, and `ocean.css`), then run `npm run check:theme` and `npm run build`.
 - **New component or util:** see the rules above, then run all five "done" commands.

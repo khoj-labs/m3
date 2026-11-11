@@ -19,7 +19,7 @@ Everything visual comes from one CSS file. This page is the spec for it, written
 5. Optionally change the shape scale (`--shape-xs` ... `--shape-xl`; keep `--shape-full: 9999px`) and the motion values.
 6. **Leave everything else alone**, in particular the `--md-*` formulas, the elevation and layout variables, and the shadcn mapping at the bottom.
 7. Run `npm run check:theme -- src/themes/<name>.css` and fix anything it reports.
-8. Preview it: open `/gallery`. Every file in `src/themes` appears in the "Theme preview" section automatically.
+8. Preview it: open `/gallery`. Every file in `src/themes` appears in the "Preview" section automatically.
 9. To use it for real, copy it over `src/theme.css`.
 
 ### Matching an exact brand color

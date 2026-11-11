@@ -44,7 +44,7 @@ const swatches = [
 
 export function ThemeSection({ theme, onThemeChange }: { onThemeChange: (name: ThemeName) => void; theme: ThemeName }) {
   return (
-    <Section name="theme" title="Theme preview">
+    <Section name="theme" title="Preview">
       <Row label="Preview a theme across every component below">
         <ToggleGroup type="single" variant="outline" value={theme} onValueChange={onThemeChange}>
           {Object.keys(themes).map((name) => <ToggleGroupItem key={name} value={name}>{name}</ToggleGroupItem>)}
