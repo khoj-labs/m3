@@ -27,6 +27,8 @@ npm install
 npm run dev
 ```
 
+Then open `/gallery` (every component, all variants and states) and `/boilerplate` (app shell, page components, utilities).
+
 # Overriding the theme
 
 ## Make your own theme
