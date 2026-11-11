@@ -10,6 +10,7 @@ import { Paper } from "@/components/ui/paper"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Typography } from "@/components/ui/typography"
+import { useScrollY } from "@/gallery/useScrollY"
 import AppAlerts from "../common/AppAlerts"
 import { ComponentsGroup } from "./ComponentSections"
 import { PageComponentsGroup } from "./PageSections"
@@ -31,17 +32,6 @@ const groups: Group[] = [
 
 /** The active group lives in the URL hash (#components | #page-components | #utils). */
 const groupFromHash = () => groups.find((g) => g.value === window.location.hash.slice(1))?.value ?? groups[0].value
-
-function useScrollY() {
-  const [y, setY] = useState(0)
-  useEffect(() => {
-    const onScroll = () => setY(window.scrollY)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-  return y
-}
 
 type IndexItem = { id: string; title: string }
 
