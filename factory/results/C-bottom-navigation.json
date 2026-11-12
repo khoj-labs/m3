@@ -1,0 +1,29 @@
+{
+ "task": "C-bottom-navigation",
+ "outcome": "flagged (kept on Radix)",
+ "safety": {
+  "severity": "low",
+  "findings": [
+   {"url": "https://github.com/shadcn-ui/ui/issues/10592", "date": "2026-05-08", "status": "open", "summary": "base-mira Tabs wrapper does not forward orientation (not relevant: this component is hand-built and horizontal only)", "severity": "low"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/10497", "date": "2026-04-26", "status": "open", "summary": "Base UI line variant of TabsList does not draw lines (shadcn styling only, not used here)", "severity": "low"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/10381", "date": "2026-04-13", "status": "open", "summary": "Incorrect rendering of Tabs with Base UI (listing title only, details not read)", "severity": "low"},
+   {"url": "https://github.com/mui/base-ui/pull/6171", "date": "2026-11-04", "status": "open", "summary": "Tabs helper dedupe PR, performance only", "severity": "low"}
+  ],
+  "notChecked": ["Reddit, Hacker News and blog searches", "issue bodies of shadcn-ui/ui#10381", "radix-ui/primitives tracker"]
+ },
+ "differences": [
+  {"category": "interaction", "where": "disabled item (gallery demo 'Disabled')", "reference": "Radix renders a native disabled attribute; arrow keys and End skip the item", "branch": "Base UI renders aria-disabled=true only; arrow keys and End move focus onto the disabled item (disabled stays focusable); Enter on it does nothing", "how": "Focus Home, press ArrowRight 3 times: focus lands on Disabled (Radix: Search). Press End: Disabled (Radix: Inbox)."},
+  {"category": "look", "where": "disabled item", "reference": "opacity 0.4, pointer-events none (disabled: variant matches the native attribute)", "branch": "opacity 1, pointer-events auto, because the disabled: variant no longer matches; would need data-disabled: classes", "how": "Compare computed opacity of the 'Disabled' tab in the first demo."},
+  {"category": "look", "where": "focus ring on disabled item", "reference": "never focusable so no ring", "branch": "focus ring drawn around the disabled item when reached by keyboard", "how": "Same as the first difference, screenshot after ArrowRight x3."},
+  {"category": "accessibility", "where": "tablist and tab DOM", "reference": "tablist tabindex=0 with all tabs tabindex=-1; tabs carry aria-controls pointing at nonexistent content ids; disabled tab has the disabled attribute", "branch": "tablist has no tabindex, selected tab has tabindex=0 (roving), no aria-controls, disabled tab has aria-disabled=true and no disabled attribute, extra data-activation-direction attributes", "how": "Inspect the DOM of #bottom-navigation in both builds."},
+  {"category": "interaction", "where": "wrapping past the disabled item", "reference": "ArrowRight from Search lands on Inbox", "branch": "sequence includes Disabled; ArrowRight from it wraps to Home", "how": "Keyboard test above."}
+ ],
+ "apiChanges": ["Trigger becomes Tab; activationMode='manual' dropped (Base UI default is manual: arrows only moved focus); data-[state=active] becomes data-active; onValueChange also receives eventDetails (consumers ignore it)"],
+ "consumersTouched": [],
+ "gates": {"lint": "not run", "typecheck": "not run", "build": "not run", "checkGallery": "not run"},
+ "viewports": ["500x701"],
+ "modes": ["dark"],
+ "commit": null,
+ "notes": "Gates not run because the swap was reverted after the comparison. The browser window would not resize (stayed 500x701), so screenshots are 500x701 only, not 1280x900 or 390x844, and only the gallery bottom-navigation section was exercised. The gallery mobile tab bar and boilerplate gallery were not compared (not checked); they use the same component with no disabled items, so the tabindex/aria differences apply to them too. Tab/Shift+Tab order, hover/press and reduced motion not checked. Computed sizes (102x52 items) and colors matched.",
+ "reasonNotMoved": "Base UI Tabs keeps disabled tabs focusable (aria-disabled, no native disabled), so arrow keys and End land on the disabled item, a focus ring appears on it, and with the current classes it loses its 0.4 opacity and pointer-events:none. Roving tabindex and ARIA attributes also differ from Radix (tablist tabindex, aria-controls, disabled attribute). Retry if Base UI offers a skip-disabled option (or the project accepts disabled-but-focusable) and item styling is moved to data-disabled: classes, then re-run keyboard and screenshot comparison at 1280x900 and 390x844, including the gallery mobile tab bar."
+}
