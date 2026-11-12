@@ -1,0 +1,33 @@
+{
+ "task": "C-sheet",
+ "outcome": "flagged (kept on Radix)",
+ "safety": {
+  "severity": "medium",
+  "findings": [
+   {"url": "https://github.com/shadcn-ui/ui/issues/12107", "date": "2026-10-02", "status": "open", "summary": "Dialog/AlertDialog/Sheet (Base UI): unmasked strip where the scrollbar was while the modal is open; reproduced here", "severity": "medium"},
+   {"url": "https://github.com/mui/base-ui/issues/4645", "date": "2026-04-17", "status": "open", "summary": "[drawer] scroll lock applies html scrollbar-gutter: stable (same mechanism)", "severity": "medium"},
+   {"url": "https://github.com/mui/base-ui/issues/4615", "date": "2026-04-15", "status": "closed", "summary": "useScrollLock: backdrops not covering scrollbar area on macOS, labelled expected behaviour", "severity": "low"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/11741", "date": "2026-09-02", "status": "open", "summary": "Base UI toast renders behind Dialog/Sheet backdrops (gallery sheet section has no toast)", "severity": "low"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/10460", "date": "2026-04-21", "status": "open", "summary": "Combobox inside Sheet popup/focus/stacking issue (not exercised in gallery)", "severity": "low"}
+  ],
+  "notChecked": ["Reddit, Hacker News, blogs not searched", "radix-ui/primitives not searched", "issue lists read through a summarising page fetch, not the API; only page 1 of results"]
+ },
+ "differences": [
+  {"category": "look", "where": "every open sheet (top, right, bottom, left): width and layout", "reference": "Radix: page keeps full viewport width while the sheet is open (clientWidth 500 in a 500px viewport); overlay 500 wide; top/bottom sheets 500 wide; right sheet x=125 w=375, left sheet w=375; html scrollbar-gutter auto", "branch": "Base UI: scroll lock sets html scrollbar-gutter: stable and body overflow hidden, so clientWidth is 485 while open; overlay 485 wide leaving a 15px unmasked strip; top/bottom sheets 485 wide; right sheet x=121 w=364, left sheet w=364 (3/4 of the narrower viewport); close button sits 15px further left", "how": "Gallery sheet section, click any side trigger, compare [data-slot=sheet-content] and [data-slot=sheet-overlay] rects and the screenshots (close X position). Same root cause as the dialog finding."},
+  {"category": "accessibility", "where": "trigger and close button attributes", "reference": "trigger has data-state; close button has no tabindex", "branch": "trigger gets data-base-ui-click-trigger, data-popup-open, tabindex; close button has tabindex 0", "how": "Inspect attributes of [data-slot=sheet-trigger] and [data-slot=sheet-close] while open"},
+  {"category": "feel", "where": "enter animation", "reference": "Radix: tailwind animate-in keyframes (fade-in plus slide-in-from-*-10)", "branch": "Base UI: CSS transition 200ms ease-in-out, starting-style fade plus 40px translate; overlay transition-opacity 150ms instead of 100ms keyframe fade. Reference frame timing could not be sampled (page was busy, first sample came at 391ms), so timing equivalence is not confirmed", "how": "Open any sheet and sample getComputedStyle opacity and translate per frame on both builds"}
+ ],
+ "apiChanges": [
+  "SheetTrigger asChild became render={<Button variant=\"outline\" />} with the label as children (OverlaySections.tsx)",
+  "Overlay became Backdrop, Content became Popup; prop types SheetPrimitive.X.Props",
+  "Internal close button uses render with Radix Button (kept on Radix) as target; typecheck not run",
+  "data-state styling replaced by data-starting-style/data-ending-style classes inside sheet.tsx"
+ ],
+ "consumersTouched": [],
+ "gates": {"lint": "not run", "typecheck": "not run", "build": "not run", "checkGallery": "not run"},
+ "viewports": ["500x701 (window resize to 1280x900 did not change the viewport in this browser; 390x844 not attempted)"],
+ "modes": ["dark"],
+ "commit": null,
+ "notes": "Swap reverted. Yes: the sheet shows the same scrollbar-gutter layout shift as the dialog (viewport 485 vs 500 while open). Swap diff was only sheet.tsx and one SheetTrigger line. Checked on both builds: all four sides open and close, Escape closes (dispatched keydown), focus returns to the trigger, body overflow hidden on both, role dialog, focus lands on a button inside. Not checked: 1280x900 and 390x844 screenshots, outside click, Tab order, reduced motion, real screen reader, reference animation frames, lint/typecheck/build/check:gallery. Screenshots at 500x701 of the top sheet show the close X offset by the gutter.",
+ "reasonNotMoved": "Base UI's scroll lock leaves scrollbar-gutter: stable on html, so while any sheet is open the viewport is 15px narrower: the overlay leaves a 15px strip, top/bottom sheets are 485px instead of 500px, side sheets are 3/4 of the narrower width, and the close button shifts left (upstream: https://github.com/shadcn-ui/ui/issues/12107, https://github.com/mui/base-ui/issues/4645). Attribute differences on trigger and close button and unconfirmed animation timing are secondary. Retry once the gutter issue is fixed or the team accepts the layout shift, and verify at 1280x900 and 390x844."
+}
