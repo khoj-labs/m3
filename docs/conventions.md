@@ -8,8 +8,15 @@ Rules for working in the m3 codebase, for people and assistants. The short, alwa
 
 - shadcn-generated files are overwritten by the CLI. Do not hand-edit them. To restyle, use the theme. They are listed in the `cliGenerated` array in `eslint.config.js`.
 - Add a shadcn component with `npx shadcn@latest add <name>`, then add its file name to `cliGenerated`.
-- The 11 hand-built components (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper) follow the shadcn conventions: `cva` variants, `data-slot` attributes, Radix primitives where they exist, tokens only. Copy an existing one when adding another.
+- The 11 hand-built components (Rating, Transfer List, FAB, List, Typography, Backdrop, App Bar, Paper, Bottom Navigation, Speed Dial, Stepper) follow the shadcn conventions: `cva` variants, `data-slot` attributes, Base UI primitives where they exist (Radix only where the component has not moved yet), tokens only. Copy an existing one when adding another.
 - Every file in `src/components/ui` needs a `<Section name="<file name>">` in `src/gallery` showing all variants and states. `npm run check:gallery` enforces it.
+
+## Radix and Base UI
+
+Nine components moved from Radix to Base UI and 21 stayed on Radix because Base UI differed in look, feel or behaviour. The reasons, and when to retry each, are in [base-ui-migration.md](base-ui-migration.md). Two things to know:
+
+- `components.json` uses the `base-nova` style, so `npx shadcn@latest add <name>` generates a Base UI component. Do not re-add a component that is still on Radix (it would be overwritten with the Base UI version and its documented differences). Check the migration page first.
+- Base UI uses a `render` prop where Radix uses `asChild`, and `useRender` instead of `Slot`.
 
 ## Boilerplate (`src/boilerplate`)
 

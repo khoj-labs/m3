@@ -1,6 +1,6 @@
 # m3
 
-> Material Design 3 components for React, built on shadcn/ui (Radix) and Tailwind CSS v4, with an application boilerplate. Every color, radius, font and motion value comes from one CSS file (src/theme.css), so the whole look changes by replacing that file.
+> Material Design 3 components for React, built on shadcn/ui (Base UI, with some components still on Radix) and Tailwind CSS v4, with an application boilerplate. Every color, radius, font and motion value comes from one CSS file (src/theme.css), so the whole look changes by replacing that file.
 
 Assistants: read AGENTS.md first (key rules, commands, where things live), then docs/conventions.md before changing code and docs/theming.md before creating or editing a theme. Validate themes with `npm run check:theme`.
 
@@ -9,6 +9,7 @@ Assistants: read AGENTS.md first (key rules, commands, where things live), then 
 - [Live gallery](https://m3.khojlabs.com/gallery): every component in all variants and states, plus the boilerplate's page components and utilities
 - [AGENTS.md](https://github.com/khoj-labs/m3/blob/main/AGENTS.md): key rules, commands and repo map for AI assistants
 - [Conventions](https://github.com/khoj-labs/m3/blob/main/docs/conventions.md): component and boilerplate rules, code style, tooling gotchas, common tasks
+- [Base UI migration](https://github.com/khoj-labs/m3/blob/main/docs/base-ui-migration.md): which components moved from Radix to Base UI, which did not, and why
 - [Theming spec](https://github.com/khoj-labs/m3/blob/main/docs/theming.md): variable reference, color role recipe, how to create a theme, validation
 - [README](https://github.com/khoj-labs/m3/blob/main/README.md): overview, how to override the theme and the boilerplate, credits, license
 
