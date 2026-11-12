@@ -1,0 +1,55 @@
+{
+  "task": "C-progress",
+  "outcome": "flagged (kept on Radix)",
+  "safety": {
+    "severity": "low",
+    "findings": [
+      {
+        "url": "https://github.com/mui/base-ui/issues/6205",
+        "date": "2026-11-08",
+        "status": "open",
+        "summary": "Hidden `x` span is exposed as StaticText inside the progressbar (accessibility tree noise). Not exercised by the gallery's Progress demo.",
+        "severity": "low"
+      },
+      {
+        "url": "https://github.com/mui/base-ui/issues?q=progress",
+        "date": "2026-11-12",
+        "status": "open",
+        "summary": "First page of Progress issues only: #6055 (feature request, ProgressGroup) and merged SSR-hydration fixes #5985 / #5642. No Radix-to-Base-UI migration regression reported.",
+        "severity": "low"
+      },
+      {
+        "url": "https://github.com/shadcn-ui/ui/issues?q=base-nova+progress",
+        "date": "2026-11-12",
+        "status": "open",
+        "summary": "No issue about the base-nova Progress component found (4 unrelated hits).",
+        "severity": "low"
+      }
+    ],
+    "notChecked": ["radix-ui/primitives issues, Reddit, Hacker News and blogs were not searched", "GitHub issue pages were read through a fetch summariser, only the first page of mui/base-ui results"]
+  },
+  "differences": [
+    {
+      "category": "accessibility",
+      "where": "all four Progress bars (0/35/70/100)",
+      "reference": "role=progressbar with aria-valuemin/aria-valuemax only; no aria-valuenow or aria-valuetext, because the m3 wrapper destructures `value` and never forwards it to Radix Root (attributes: aria-valuemax, aria-valuemin, role, data-state, data-max, data-slot, class).",
+      "branch": "Base UI exposes aria-valuenow (0/35/70/100) and aria-valuetext (\"35%\" etc.) plus data-progressing/data-complete. Screen readers would announce a value where the reference announces none. Looks like an improvement but is a difference.",
+      "how": "In /gallery#progress run getAttributeNames() on [data-slot=progress]: reference lacks aria-valuenow/aria-valuetext, branch has them."
+    },
+    {
+      "category": "api",
+      "where": "Progress DOM structure and exports",
+      "reference": "Single Root (the track: relative flex h-1 ... bg-muted) containing one Indicator slid with translateX(-(100-value)%).",
+      "branch": "base-nova file renders Root (flex flex-wrap gap-3) > Track (h-1 bg-muted) > Indicator (width driven by Base UI), adds children slot and new exports ProgressTrack, ProgressIndicator, ProgressLabel, ProgressValue. className now lands on the outer wrapper, not the 4px track, so any consumer className styling the bar itself changes meaning. Indicator animates width rather than transform.",
+      "how": "Diff radix-nova and base-nova progress.json registry files; inspect [data-slot=progress] children."
+    }
+  ],
+  "apiChanges": ["ProgressPrimitive.Root props type becomes ProgressPrimitive.Root.Props", "Root gains children for Label/Value", "Track and Indicator become separate exported parts"],
+  "consumersTouched": [],
+  "gates": { "lint": "not checked", "typecheck": "not checked", "build": "not checked", "checkGallery": "not checked" },
+  "viewports": ["1280x900"],
+  "modes": ["dark"],
+  "commit": null,
+  "notes": "Registry files differ (not a no-op). At 1280 wide, bar geometry matched: root, track and indicator 864x4 px, indicator widths 0/302/605/864 px consistent with 0/35/70/100 percent, and dark-mode screenshots looked identical. The 390x844 pass is not valid: resize_window did not change the page viewport (innerWidth stayed 1280 on reference), so mobile was not verified. Hover/focus/keyboard checks not applicable (non-interactive); reduced-motion and transition animation were not compared. Base UI swap was applied locally, compared on port 5321, then reverted with git checkout.",
+  "reasonNotMoved": "Visual output matches, but Base UI's Progress adds aria-valuenow/aria-valuetext (the Radix reference omits them because the wrapper never forwards value) and restructures the component into Root > Track > Indicator with className moving to the outer wrapper and the indicator animating width instead of transform, so screen-reader output and API both differ (base-nova registry file https://ui.shadcn.com/r/styles/base-nova/progress.json). Retry if the accessibility change is accepted as an intended improvement and the wrapper is adjusted to keep className on the track."
+}
