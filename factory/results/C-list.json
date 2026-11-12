@@ -1,0 +1,18 @@
+{
+ "task": "C-list",
+ "outcome": "migrated",
+ "safety": {"severity": "low", "findings": [
+  {"url": "https://github.com/mui/base-ui/issues/5431", "date": "2026-08-08", "status": "closed", "summary": "useRender read render element props/ref before lazy unwrap; closed", "severity": "low"},
+  {"url": "https://github.com/mui/base-ui/issues/4039", "date": "2026-02-10", "status": "closed", "summary": "useRender could crash during reconciliation; closed", "severity": "low"},
+  {"url": "https://github.com/shadcn-ui/ui/issues/12179", "date": "2026-10-06", "status": "open", "summary": "Docs error about TooltipTrigger render prop; not used by this component", "severity": "low"}
+ ], "notChecked": ["Reddit, Hacker News, blogs (only GitHub issue search API run)"]},
+ "differences": [],
+ "apiChanges": ["ListItem asChild removed; use render={<button />} / render={<a href />} / render={<span />}. Children go in ListItem and become children of the rendered element; wrapper li is unchanged."],
+ "consumersTouched": ["src/gallery/DisplaySections.tsx", "src/gallery/GalleryNav.tsx", "src/boilerplate/layouts/SideNav.tsx"],
+ "gates": {"lint": "pass", "typecheck": "pass", "build": "pass", "checkGallery": "pass"},
+ "viewports": ["1280x900", "390x844"],
+ "modes": ["dark"],
+ "commit": null,
+ "notes": "Compared gallery list section, GalleryNav links (48) and SideNav iframe li DOM between reference and branch by class/attribute/HTML hash: identical. Screenshots at 1280 identical; the 390 window resize did not narrow the viewport, so mobile layout was not truly checked. AppShell and UserSettings do not use ListItem asChild (other components' asChild), untouched. ListPage and PageSections use no asChild.",
+ "reasonNotMoved": ""
+}

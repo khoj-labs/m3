@@ -78,10 +78,12 @@ export function GalleryNav({ tab }: { tab: string }) {
                 </ListSubheader>
               )}
               {expanded && items.map(({ id, title }) => (
-                <ListItem key={id} asChild selected={active === id}>
-                  <a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }) }}>
-                    <ListItemText primary={title} className="[&>span]:text-sm" />
-                  </a>
+                <ListItem
+                  key={id}
+                  selected={active === id}
+                  render={<a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }) }} />}
+                >
+                  <ListItemText primary={title} className="[&>span]:text-sm" />
                 </ListItem>
               ))}
             </Fragment>

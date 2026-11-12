@@ -1,6 +1,6 @@
+import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
-import { Slot } from "radix-ui"
 import * as React from "react"
 
 function List({ className, dense, ...props }: React.ComponentProps<"ul"> & { dense?: boolean }) {
@@ -33,29 +33,34 @@ const listItemVariants = cva(
 )
 
 /**
- * Renders an <li> row. With `asChild`, the single child (a <button> or <a>)
- * becomes the interactive row inside the <li>.
+ * Renders an <li> row. With `render` (for example `render={<button />}` or
+ * `render={<a href="..." />}`), the element becomes the interactive row inside
+ * the <li>, and the ListItem children become its children.
  */
 function ListItem({
   className,
   interactive,
   selected,
   disabled,
-  asChild = false,
+  render,
   children,
   ...props
 }: React.ComponentProps<"li"> &
-  VariantProps<typeof listItemVariants> & { asChild?: boolean }) {
-  if (asChild) {
+  VariantProps<typeof listItemVariants> & { render?: useRender.ComponentProps<"button">["render"] }) {
+  const row = useRender({
+    defaultTagName: "div",
+    render,
+    props: {
+      "aria-current": selected ? "true" : undefined,
+      "aria-disabled": disabled || undefined,
+      className: cn(listItemVariants({ interactive: interactive ?? true, selected, disabled }), className),
+      children,
+    },
+  })
+  if (render) {
     return (
       <li data-slot="list-item" className="list-none" {...props}>
-        <Slot.Root
-          aria-current={selected ? "true" : undefined}
-          aria-disabled={disabled || undefined}
-          className={cn(listItemVariants({ interactive: interactive ?? true, selected, disabled }), className)}
-        >
-          {children}
-        </Slot.Root>
+        {row}
       </li>
     )
   }
