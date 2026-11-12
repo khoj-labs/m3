@@ -1,0 +1,14 @@
+{
+  "task": "C-alert",
+  "outcome": "no-op",
+  "safety": {"severity": "none", "findings": [], "notChecked": ["GitHub/Reddit/HN searches not run: component has no primitive, so no migration risk exists"]},
+  "differences": [],
+  "apiChanges": [],
+  "consumersTouched": [],
+  "gates": {"lint": "not checked", "typecheck": "not checked", "build": "not checked", "checkGallery": "not checked"},
+  "viewports": [],
+  "modes": [],
+  "commit": null,
+  "notes": "Fetched https://ui.shadcn.com/r/styles/radix-nova/alert.json and base-nova/alert.json: file content is identical (only the registry path and docs/examples URLs in metadata differ). Component is a plain div with cva, no Radix or Base UI import. No code changed; screenshots not taken since nothing changes.",
+  "reasonNotMoved": ""
+}
