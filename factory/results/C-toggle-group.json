@@ -1,0 +1,32 @@
+{
+  "task": "C-toggle-group",
+  "outcome": "flagged (kept on Radix)",
+  "safety": {
+    "severity": "medium",
+    "findings": [
+      {"url": "https://github.com/mui/base-ui/issues/3525", "date": "2025-12-12", "status": "open", "summary": "Single selection mode has no role=radio semantics (request still open); matches the accessibility difference measured below.", "severity": "medium"},
+      {"url": "https://github.com/mui/base-ui/issues/3970", "date": "2026-02-04", "status": "closed", "summary": "Home/End keyboard navigation was missing in ToggleGroup; closed.", "severity": "low"},
+      {"url": "https://github.com/shadcn-ui/ui/issues/10717", "date": "2026-05-21", "status": "open", "summary": "ToggleGroup outline + spacing=0 renders separated items (Tailwind v4); not exercised by gallery (spacing is default 2).", "severity": "low"},
+      {"url": "https://github.com/shadcn-ui/ui/issues/9520", "date": "2026-02-02", "status": "open", "summary": "Accessibility support request for toggle group.", "severity": "low"},
+      {"url": "https://github.com/mui/base-ui/issues/4487", "date": "2026-03-30", "status": "closed", "summary": "Orientation did not affect keyboard nav; fixed.", "severity": "low"}
+    ],
+    "notChecked": ["Reddit, Hacker News and blogs (only GitHub issue search API used)", "Screen reader output"]
+  },
+  "differences": [
+    {"category": "accessibility", "where": "single-mode group (Left/Center/Right)", "reference": "container role=radiogroup, items role=radio with aria-checked", "branch": "container role=group, items are plain buttons with aria-pressed (no radio semantics)", "how": "Inspect first group in #toggle-group on reference vs branch"},
+    {"category": "accessibility", "where": "multiple-mode group (B/I/U) and disabled group", "reference": "container role=toolbar (multiple) / role=radiogroup (disabled single)", "branch": "container role=group in both", "how": "Inspect the 2nd and 3rd groups"},
+    {"category": "accessibility", "where": "disabled group (A/B)", "reference": "container tabindex=-1, items disabled with tabindex=-1", "branch": "first item keeps tabindex=0 and gets aria-disabled=true plus disabled", "how": "Inspect third group tabindex values"},
+    {"category": "api", "where": "ThemeSection consumer", "reference": "type=single with string value", "branch": "value is always an array; theme string must be wrapped and unwrapped (mechanical, listed for completeness)", "how": "n/a"}
+  ],
+  "apiChanges": [
+    "type=single|multiple becomes multiple flag; value/defaultValue become arrays; onValueChange receives array.",
+    "DOM attributes data-state=on|off become data-pressed; data-multiple added to group. Nothing in src selects on data-state for items."
+  ],
+  "consumersTouched": [],
+  "gates": {"lint": "not run", "typecheck": "pass", "build": "not run", "checkGallery": "not run"},
+  "viewports": ["1280x900"],
+  "modes": ["dark"],
+  "commit": null,
+  "notes": "Compared on the trial swap: item sizes (46.3x32, 64.5x32, 54.8x32, 38x32, 32x32), background colours and radius identical; real click on the selected item deselects on both; real ArrowRight moves focus only (not selection) and roving tabindex moves identically on both. 390x844 not checked (window resize does not shrink the viewport in this browser); Tab/Shift+Tab ring, Home/End, multiple-mode keyboard and reduced motion not checked. Trial swap was reverted.",
+  "reasonNotMoved": "Base UI ToggleGroup exposes different accessibility semantics from the Radix reference: single mode is role=group with aria-pressed buttons instead of role=radiogroup/radio with aria-checked, multiple mode is role=group instead of role=toolbar, and the disabled group keeps a tabindex=0 item with aria-disabled where Radix has none. Visuals and mouse/arrow-key behaviour matched. See https://github.com/mui/base-ui/issues/3525 (open). Retry when Base UI offers radio semantics for single mode or the team accepts the screen-reader change."
+}
