@@ -1,0 +1,41 @@
+{
+  "task": "C-separator",
+  "outcome": "flagged (kept on Radix)",
+  "safety": {
+    "severity": "low",
+    "findings": [
+      {
+        "url": "https://mintlify.wiki/mui/base-ui/components/separator",
+        "date": "2026-11-12",
+        "status": "closed",
+        "summary": "Web searches (shadcn base-nova separator issue, mui/base-ui separator bug) found no reported migration bug. Docs confirm Base UI always sets role=separator and aria-orientation; no decorative prop.",
+        "severity": "low"
+      }
+    ],
+    "notChecked": ["GitHub issue trackers were reached only through general web search, not queried directly"]
+  },
+  "differences": [
+    {
+      "category": "accessibility",
+      "where": "all Separator instances (horizontal and vertical)",
+      "reference": "Radix default decorative=true renders role=\"none\" with no aria-orientation (read from the live reference DOM: 3 separators, all role=none).",
+      "branch": "Base UI Separator (node_modules/@base-ui/react/separator/Separator.js, v1.9.0) always renders role=\"separator\" and aria-orientation=<orientation>; screen readers would announce a separator where the reference announces nothing. The base-nova file was not applied; difference established from the primitive's source.",
+      "how": "Inspect [data-slot=separator] in /gallery section #separator: reference role=none, Base UI role=separator."
+    },
+    {
+      "category": "api",
+      "where": "Separator props",
+      "reference": "Accepts decorative (default true) forwarded to Radix.",
+      "branch": "Base UI has no decorative prop; the base-nova file drops it. Decorative behaviour would need a manual role=\"none\" override.",
+      "how": "Compare radix-nova vs base-nova separator.json registry files."
+    }
+  ],
+  "apiChanges": ["decorative prop removed", "SeparatorPrimitive.Root becomes SeparatorPrimitive (Props type from @base-ui/react/separator)"],
+  "consumersTouched": [],
+  "gates": { "lint": "not checked", "typecheck": "not checked", "build": "not checked", "checkGallery": "not checked" },
+  "viewports": ["1280x900", "390x844"],
+  "modes": ["dark"],
+  "commit": null,
+  "notes": "Registry files differ (not a no-op). Class names are identical in both files, so look is expected to match; only accessibility and API differ. Screenshots and keyboard checks were not performed; the decision rests on the reference DOM and the Base UI source. The worktree was on main and was fast-forwarded to factory/base-ui to obtain tasks.json.",
+  "reasonNotMoved": "Base UI's Separator always exposes role=\"separator\" with aria-orientation and has no decorative prop, while the Radix reference (decorative default true) renders role=\"none\", so assistive tech would newly announce every divider in the gallery (source: node_modules/@base-ui/react/separator/Separator.js v1.9.0; docs https://mintlify.wiki/mui/base-ui/components/separator). Retry once Base UI offers decorative semantics, or if a manual role=\"none\" override in the wrapper is approved."
+}
