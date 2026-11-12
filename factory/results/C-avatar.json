@@ -1,0 +1,40 @@
+{
+  "task": "C-avatar",
+  "outcome": "migrated",
+  "safety": {
+    "severity": "low",
+    "findings": [
+      {
+        "url": "https://github.com/mui/base-ui/issues/5988",
+        "date": "2026-10-14",
+        "status": "open",
+        "summary": "Avatar.Fallback with an explicit delay prop also delays the fallback when there is no image or it failed. m3 passes no delay, so the fallback shows immediately.",
+        "severity": "low"
+      },
+      {
+        "url": "https://github.com/shadcn-ui/ui/issues/12264",
+        "date": "2026-10-10",
+        "status": "open",
+        "summary": "Avatar mix-blend-mode flashes on window resize in Chrome. The class is identical in the radix-nova and base-nova files, so it is not a Radix-to-Base difference.",
+        "severity": "low"
+      },
+      {
+        "url": "https://github.com/mui/base-ui/issues/4468",
+        "date": "2026-03-28",
+        "status": "closed",
+        "summary": "Fallback flash for cached images on SSR hydration; fixed (PR 4469). Other avatar issues (5379, 5529, 4109) are closed.",
+        "severity": "low"
+      }
+    ],
+    "notChecked": ["Reddit, Hacker News and blog search", "Screen reader behaviour", "Image load-failure fallback in the browser (gallery has no broken-image case)"]
+  },
+  "differences": [],
+  "apiChanges": ["Import switches from radix-ui to @base-ui/react/avatar; prop types become AvatarPrimitive.*.Props. Radix Fallback delayMs becomes Base UI delay; no consumer uses it."],
+  "consumersTouched": [],
+  "gates": { "lint": "pass", "typecheck": "pass", "build": "pass", "checkGallery": "pass" },
+  "viewports": ["1280x900"],
+  "modes": ["dark"],
+  "commit": null,
+  "notes": "Registry diff radix-nova vs base-nova is import and type lines only. Compared reference and local at 1280 wide: screenshots look identical; DOM, attributes, rects, background and font size of every avatar part match. 390x844 not checked: resize_window did not change the viewport (innerWidth stayed 1280); the avatar row has no responsive classes. Consumers needed no edits (no asChild). Only data attribute order differs.",
+  "reasonNotMoved": null
+}
