@@ -1,0 +1,30 @@
+{
+ "task": "C-dropdown-menu",
+ "outcome": "flagged (kept on Radix)",
+ "safety": {
+  "severity": "high",
+  "findings": [
+   {"url": "https://github.com/shadcn-ui/ui/issues/9117", "date": "2025-12-16", "status": "open", "summary": "DropdownMenuLabel (Base UI GroupLabel) throws 'MenuGroupContext is missing' when used outside DropdownMenuGroup. Both the gallery demo and UserSettings put the label directly in the content.", "severity": "high"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/12330", "date": "2026-10-15", "status": "open", "summary": "Base UI DropdownMenuContent is styled w-(--anchor-width), fixing width to the trigger width; long items wrap.", "severity": "medium"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/12112", "date": "2026-10-02", "status": "open", "summary": "Translucent menu preset: backdrop-blur does not paint in Chromium (cn-menu-translucent).", "severity": "medium"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/9233", "date": "2025-12-30", "status": "open", "summary": "Base UI dropdown causes scrollbar flash and layout shift in RTL.", "severity": "low"},
+   {"url": "https://github.com/mui/base-ui/issues/3074", "date": "2025-10-27", "status": "open", "summary": "Opening Base UI MenuTrigger re-renders a virtualized grid (Radix does not).", "severity": "low"},
+   {"url": "https://github.com/shadcn-ui/ui/issues/9658", "date": "2026-02-17", "status": "open", "summary": "Stray dark class in base-ui dropdown-menu.", "severity": "low"}
+  ],
+  "notChecked": ["Reddit, Hacker News and blog searches were not run; only GitHub issue lists for mui/base-ui and shadcn-ui/ui were queried (radix-ui/primitives not queried)."]
+ },
+ "differences": [
+  {"category": "api", "where": "DropdownMenuLabel outside DropdownMenuGroup (gallery demo and UserSettings)", "reference": "Label renders anywhere inside the content", "branch": "Throws 'Base UI: MenuGroupContext is missing' on opening the menu and unmounts the whole React tree (blank page)", "how": "Swap to base-nova dropdown-menu, open /gallery#components, click Open menu. Console shows the error. Fix needs the label moved inside a Group (done only as a temporary experiment) in both consumers."},
+  {"category": "look", "where": "Open trigger button", "reference": "Trigger keeps its normal outline background while the menu is open", "branch": "Trigger looked lighter while open (screenshot with pointer over it; possibly hover plus popup-open state); not isolated", "how": "Open menu and compare the Open menu button in both builds"},
+  {"category": "interaction", "where": "Page while menu is open", "reference": "Radix sets body style pointer-events: none and overflow hidden", "branch": "Base UI sets only overflow: hidden on body (outside click still closed the menu and did not trigger the button underneath)", "how": "Open menu, inspect document.body style"},
+  {"category": "look", "where": "DropdownMenuContent width", "reference": "Radix nova width is w-(--radix-dropdown-menu-trigger-width) min-w-32, overridden by w-56 in the demo", "branch": "base-nova uses w-(--anchor-width) (see shadcn #12330); same in the demo because w-56 overrides, but UserSettings uses only min-w-48 so width could differ", "how": "Not run on UserSettings"}
+ ],
+ "apiChanges": ["asChild on DropdownMenuTrigger and DropdownMenuItem becomes render={...} with children moved", "DropdownMenuLabel must be inside DropdownMenuGroup", "Radix Content becomes Positioner plus Popup; icon placeholders replaced with lucide icons", "onCheckedChange/onValueChange signatures gain an event-details second argument"],
+ "consumersTouched": [],
+ "gates": {"lint": "not run", "typecheck": "pass (experimental swap only, reverted)", "build": "not run", "checkGallery": "not run"},
+ "viewports": ["1280x900"],
+ "modes": ["dark"],
+ "commit": null,
+ "notes": "Experimental swap was applied temporarily to compare, then reverted with git checkout. Compared at 1280x900 dark with the Label wrapped in a Group: menu geometry (328.5,191.5,224x274), items, roles, aria-checked/aria-disabled, ArrowDown/End focus movement, Escape focus return and outside-click dismissal matched. Not checked: 390x844, submenu, UserSettings consumer, enter/exit animation timing, type-ahead, Tab, reduced motion, touch.",
+ "reasonNotMoved": "The base-nova DropdownMenuLabel is Menu.GroupLabel, which throws 'MenuGroupContext is missing' unless wrapped in a Group (open upstream: https://github.com/shadcn-ui/ui/issues/9117). Both consumers (gallery demo, UserSettings avatar menu) render a label directly in the content, so the swapped build crashes the entire app on opening the menu; the result is a high safety finding plus a visible difference. Also open: width tied to trigger (https://github.com/shadcn-ui/ui/issues/12330) and translucent blur issue (https://github.com/shadcn-ui/ui/issues/12112). Retry when #9117 is fixed upstream or when the labels are wrapped in DropdownMenuGroup by the consumer (an API change to accept), then recheck the open-trigger look, body pointer-events and UserSettings width."
+}
