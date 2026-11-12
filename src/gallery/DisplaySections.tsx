@@ -191,12 +191,12 @@ export function DisplaySections() {
         <Paper variant="outlined" className="w-80">
           <List>
             <ListSubheader>Mail</ListSubheader>
-            <ListItem asChild selected><button><ListItemIcon><InboxIcon /></ListItemIcon><ListItemText primary="Inbox" secondary="Selected" /><ListItemTrailing>24</ListItemTrailing></button></ListItem>
-            <ListItem asChild><button><ListItemIcon><FolderIcon /></ListItemIcon><ListItemText primary="Archive" secondary="Interactive" /></button></ListItem>
+            <ListItem render={<button />} selected><ListItemIcon><InboxIcon /></ListItemIcon><ListItemText primary="Inbox" secondary="Selected" /><ListItemTrailing>24</ListItemTrailing></ListItem>
+            <ListItem render={<button />}><ListItemIcon><FolderIcon /></ListItemIcon><ListItemText primary="Archive" secondary="Interactive" /></ListItem>
             <ListItem><ListItemIcon><HeartIcon /></ListItemIcon><ListItemText primary="Static item" secondary="Not interactive" /></ListItem>
-            <ListItem asChild disabled><button><ListItemIcon><BellIcon /></ListItemIcon><ListItemText primary="Disabled" /></button></ListItem>
+            <ListItem render={<button />} disabled><ListItemIcon><BellIcon /></ListItemIcon><ListItemText primary="Disabled" /></ListItem>
             <ListDivider />
-            <ListItem asChild><button><ListItemIcon><SettingsIcon /></ListItemIcon><ListItemText primary="Settings" /></button></ListItem>
+            <ListItem render={<button />}><ListItemIcon><SettingsIcon /></ListItemIcon><ListItemText primary="Settings" /></ListItem>
           </List>
         </Paper>
       </Section>
