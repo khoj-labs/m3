@@ -1,0 +1,16 @@
+{
+ "task": "C-typography",
+ "outcome": "migrated",
+ "safety": {"severity": "low", "findings": [
+  {"url": "https://github.com/mui/base-ui/issues?q=useRender", "date": "2026-11-12", "status": "open", "summary": "Only open issue #3879 is a type-safety enhancement; closed #5561/#5431 (lazy render elements losing props/refs) fixed Aug 2026.", "severity": "low"}],
+  "notChecked": ["Reddit, Hacker News, blogs, shadcn-ui/ui and radix-ui/primitives trackers not searched"]},
+ "differences": [],
+ "apiChanges": ["asChild removed; use render prop (no consumer used it). `as` prop kept (implemented via render={createElement(as)}). Props type is now useRender.ComponentProps<'p'>."],
+ "consumersTouched": [],
+ "gates": {"lint": "pass", "typecheck": "pass", "build": "pass", "checkGallery": "pass"},
+ "viewports": ["1280x900"],
+ "modes": ["dark"],
+ "commit": null,
+ "notes": "At 1280 the typography section's per-element attributes (order-normalised) and computed styles/box sizes hash identically on reference and branch; screenshots look identical. Only difference is HTML attribute order (data-slot/class), not visible. as=\"h1\" in PageHeader renders h1 with correct data-slot/variant/classes. 390x844 not checked: resize_window did not change innerWidth (stayed 1280); component has no responsive behaviour. Interactions n/a (static text). Mobile and light mode not checked.",
+ "reasonNotMoved": ""
+}
