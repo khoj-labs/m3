@@ -1,0 +1,17 @@
+{
+ "task": "C-sonner",
+ "outcome": "no-op",
+ "method": "orchestrator: fetched https://ui.shadcn.com/r/styles/radix-nova/sonner.json and .../base-nova/sonner.json on 2026-11-12; contents and dependencies are identical once the registry path is normalised",
+ "safety": {
+  "severity": "none",
+  "findings": [],
+  "notChecked": [
+   "no primitive is involved, so no migration search was run"
+  ]
+ },
+ "differences": [],
+ "apiChanges": [],
+ "consumersTouched": [],
+ "commit": null,
+ "notes": "No code change needed; the component is already identical under Base UI."
+}
