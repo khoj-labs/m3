@@ -25,7 +25,7 @@ export default function PageHeader({ title, subtitle, Icon, createLink, createLa
           {title}
         </Typography>
         {createLink ? (
-          <Button asChild><Link to={createLink}>{createLabel}</Link></Button>
+          <Button nativeButton={false} render={<Link to={createLink} />}>{createLabel}</Button>
         ) : null}
       </div>
       <div role="separator" className="h-[3px] rounded-full bg-md-outline-variant" />

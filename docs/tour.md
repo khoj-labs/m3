@@ -8,7 +8,7 @@ Take every number from the repo, never from this page: run `npm run check:galler
 
 Write at most 8 lines covering:
 
-1. **What:** Material Design 3 components for React, built on shadcn/ui (Base UI, with some components still on Radix) and restyled with M3 tokens, plus hand-built extras shadcn doesn't ship, plus an application boilerplate.
+1. **What:** Material Design 3 components for React, built on shadcn/ui (Base UI) and restyled with M3 tokens, plus hand-built extras shadcn doesn't ship, plus an application boilerplate.
 2. **What's in it:** component and boilerplate counts (from `npm run check:gallery`).
 3. **See it:** the live gallery at https://m3.khojlabs.com/gallery, or locally `npm run dev` then `/gallery`. One page with tabs for Components (every variant and state), Page components (app shell, headers, states) and Utils (interactive demos).
 4. **Theme it:** all visual values live in `src/theme.css`; see [theming.md](theming.md).

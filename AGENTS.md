@@ -2,7 +2,7 @@
 
 Instructions for AI coding assistants (Claude Code, Cursor, Copilot, Codex, ...) working in this repo. People: see [README.md](README.md).
 
-m3 is Material Design 3 components for React: the shadcn/ui components (Base UI, with some still on Radix) restyled with M3 tokens, 11 hand-built extras, and an application boilerplate. React 19, TypeScript 7, Vite 8, Tailwind CSS v4. All colors, radii, fonts and motion come from **one file**, `src/theme.css`.
+m3 is Material Design 3 components for React: the shadcn/ui components (on Base UI) restyled with M3 tokens, 11 hand-built extras, and an application boilerplate. React 19, TypeScript 7, Vite 8, Tailwind CSS v4. All colors, radii, fonts and motion come from **one file**, `src/theme.css`.
 
 If the user asks about the repo as a whole ("tldr this", "tell me everything", "what is this?") and no file is in focus, follow [docs/tour.md](docs/tour.md).
 

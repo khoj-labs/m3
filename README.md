@@ -90,8 +90,7 @@ m3 stands on the work of others. Thank you to all of the following.
 
 | Library | License | Used for |
 | --- | --- | --- |
-| [Radix UI](https://github.com/radix-ui/primitives) (`radix-ui`) | MIT | Accessible primitives behind the 21 components that have not moved to Base UI yet (see [docs/base-ui-migration.md](docs/base-ui-migration.md)) |
-| [Base UI](https://github.com/mui/base-ui) (`@base-ui/react`) | MIT | Primitives for the migrated components and the Combobox |
+| [Base UI](https://github.com/mui/base-ui) (`@base-ui/react`) | MIT | Accessible primitives behind every component |
 | [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) | MIT | Styling |
 | [tw-animate-css](https://github.com/Wombosvideo/tw-animate-css) | MIT | Enter/exit animation utilities |
 | [class-variance-authority](https://github.com/joe-bell/cva) | Apache-2.0 | Component variants |

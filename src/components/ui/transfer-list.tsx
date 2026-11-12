@@ -53,7 +53,8 @@ function TransferList({
         <div className="flex items-center gap-3 border-b border-md-outline-variant px-3 py-2">
           <Checkbox
             aria-label={`Select all in ${title}`}
-            checked={allChecked ? true : some ? "indeterminate" : false}
+            checked={allChecked}
+            indeterminate={some}
             disabled={enabled.length === 0}
             onCheckedChange={() =>
               setChecked((c) => (allChecked ? c.filter((id) => !enabled.includes(id)) : [...new Set([...c, ...enabled])]))

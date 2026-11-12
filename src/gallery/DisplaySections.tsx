@@ -123,12 +123,12 @@ export function DisplaySections() {
       </Section>
 
       <Section name="accordion" title="Accordion">
-        <Accordion type="single" collapsible defaultValue="a" className="max-w-md">
+        <Accordion defaultValue={["a"]} className="max-w-md">
           <AccordionItem value="a"><AccordionTrigger>Open by default</AccordionTrigger><AccordionContent>Content A.</AccordionContent></AccordionItem>
           <AccordionItem value="b"><AccordionTrigger>Collapsed</AccordionTrigger><AccordionContent>Content B.</AccordionContent></AccordionItem>
           <AccordionItem value="c" disabled><AccordionTrigger>Disabled</AccordionTrigger><AccordionContent>Content C.</AccordionContent></AccordionItem>
         </Accordion>
-        <Accordion type="multiple" defaultValue={["x", "y"]} className="max-w-md">
+        <Accordion multiple defaultValue={["x", "y"]} className="max-w-md">
           <AccordionItem value="x"><AccordionTrigger>Multiple open 1</AccordionTrigger><AccordionContent>X</AccordionContent></AccordionItem>
           <AccordionItem value="y"><AccordionTrigger>Multiple open 2</AccordionTrigger><AccordionContent>Y</AccordionContent></AccordionItem>
         </Accordion>
@@ -181,7 +181,7 @@ export function DisplaySections() {
 
       <Section name="collapsible" title="Collapsible">
         <Collapsible open={open} onOpenChange={setOpen} className="w-72 space-y-2">
-          <div className="flex items-center justify-between"><span className="text-sm font-medium">3 starred repos</span><CollapsibleTrigger asChild><Button variant="ghost" size="icon-sm" aria-label="toggle"><ChevronsUpDownIcon /></Button></CollapsibleTrigger></div>
+          <div className="flex items-center justify-between"><span className="text-sm font-medium">3 starred repos</span><CollapsibleTrigger render={<Button variant="ghost" size="icon-sm" aria-label="toggle" />}><ChevronsUpDownIcon /></CollapsibleTrigger></div>
           <div className="rounded-lg border px-3 py-2 text-sm">repo/one</div>
           <CollapsibleContent className="space-y-2"><div className="rounded-lg border px-3 py-2 text-sm">repo/two</div><div className="rounded-lg border px-3 py-2 text-sm">repo/three</div></CollapsibleContent>
         </Collapsible>

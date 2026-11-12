@@ -60,7 +60,7 @@ export function FormSections() {
         <Row label="States">
           <Label><Checkbox /> Unchecked</Label>
           <Label><Checkbox defaultChecked /> Checked</Label>
-          <Label><Checkbox checked="indeterminate" /> Indeterminate</Label>
+          <Label><Checkbox indeterminate /> Indeterminate</Label>
           <Label><Checkbox disabled /> Disabled</Label>
           <Label><Checkbox disabled defaultChecked /> Disabled checked</Label>
           <Label><Checkbox aria-invalid defaultChecked={false} /> Invalid</Label>
@@ -116,7 +116,7 @@ export function FormSections() {
       <Section name="slider" title="Slider">
         <Row label="Single / range / disabled / vertical" className="items-start">
           <Slider defaultValue={[40]} className="w-48" />
-          <Slider value={range} onValueChange={setRange} className="w-48" />
+          <Slider value={range} onValueChange={(v) => setRange([...(v as number[])])} className="w-48" />
           <Slider defaultValue={[60]} disabled className="w-48" />
           <Slider defaultValue={[50]} orientation="vertical" className="h-24" />
         </Row>
@@ -171,17 +171,17 @@ export function FormSections() {
 
       <Section name="toggle-group" title="Toggle Group">
         <Row label="Single / multiple / outline / disabled">
-          <ToggleGroup type="single" defaultValue="left">
+          <ToggleGroup defaultValue={["left"]}>
             <ToggleGroupItem value="left">Left</ToggleGroupItem>
             <ToggleGroupItem value="center">Center</ToggleGroupItem>
             <ToggleGroupItem value="right">Right</ToggleGroupItem>
           </ToggleGroup>
-          <ToggleGroup type="multiple" variant="outline" defaultValue={["b"]}>
+          <ToggleGroup multiple variant="outline" defaultValue={["b"]}>
             <ToggleGroupItem value="b" aria-label="bold"><BoldIcon /></ToggleGroupItem>
             <ToggleGroupItem value="i" aria-label="italic"><ItalicIcon /></ToggleGroupItem>
             <ToggleGroupItem value="u" aria-label="underline"><UnderlineIcon /></ToggleGroupItem>
           </ToggleGroup>
-          <ToggleGroup type="single" variant="outline" disabled>
+          <ToggleGroup variant="outline" disabled>
             <ToggleGroupItem value="a">A</ToggleGroupItem>
             <ToggleGroupItem value="b">B</ToggleGroupItem>
           </ToggleGroup>

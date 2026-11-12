@@ -19,11 +19,11 @@ export function OverlaySections() {
     <>
       <Section name="dialog" title="Dialog">
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open dialog</Button></DialogTrigger>
+          <DialogTrigger render={<Button variant="outline" />}>Open dialog</DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>Edit profile</DialogTitle><DialogDescription>Make changes, then save.</DialogDescription></DialogHeader>
             <Input placeholder="Name" />
-            <DialogFooter><DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose><Button>Save</Button></DialogFooter>
+            <DialogFooter><DialogClose render={<Button variant="ghost" />}>Cancel</DialogClose><Button>Save</Button></DialogFooter>
           </DialogContent>
         </Dialog>
       </Section>
@@ -32,7 +32,7 @@ export function OverlaySections() {
         <Row label="Sides">
           {(["top", "right", "bottom", "left"] as const).map((side) => (
             <Sheet key={side}>
-              <SheetTrigger asChild><Button variant="outline">{side}</Button></SheetTrigger>
+              <SheetTrigger render={<Button variant="outline" />}>{side}</SheetTrigger>
               <SheetContent side={side}>
                 <SheetHeader><SheetTitle>Sheet ({side})</SheetTitle><SheetDescription>Slides in from the {side}.</SheetDescription></SheetHeader>
                 <SheetFooter><Button>Done</Button></SheetFooter>
@@ -44,7 +44,7 @@ export function OverlaySections() {
 
       <Section name="popover" title="Popover">
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open popover</Button></PopoverTrigger>
+          <PopoverTrigger render={<Button variant="outline" />}>Open popover</PopoverTrigger>
           <PopoverContent className="w-64 text-sm">Popover content with <b>rich</b> text.</PopoverContent>
         </Popover>
       </Section>
@@ -52,17 +52,17 @@ export function OverlaySections() {
       <Section name="tooltip" title="Tooltip">
         <Row label="Sides / disabled trigger wrapper">
           {(["top", "right", "bottom", "left"] as const).map((side) => (
-            <Tooltip key={side}><TooltipTrigger asChild><Button variant="outline">{side}</Button></TooltipTrigger><TooltipContent side={side}>Tooltip {side}</TooltipContent></Tooltip>
+            <Tooltip key={side}><TooltipTrigger render={<Button variant="outline" />}>{side}</TooltipTrigger><TooltipContent side={side}>Tooltip {side}</TooltipContent></Tooltip>
           ))}
         </Row>
       </Section>
 
       <Section name="dropdown-menu" title="Dropdown Menu">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild><Button variant="outline">Open menu</Button></DropdownMenuTrigger>
+          <DropdownMenuTrigger render={<Button variant="outline" />}>Open menu</DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>My account</DropdownMenuLabel>
             <DropdownMenuGroup>
+              <DropdownMenuLabel>My account</DropdownMenuLabel>
               <DropdownMenuItem><PencilIcon />Edit<DropdownMenuShortcut>⌘E</DropdownMenuShortcut></DropdownMenuItem>
               <DropdownMenuItem><CopyIcon />Copy<DropdownMenuShortcut>⌘C</DropdownMenuShortcut></DropdownMenuItem>
               <DropdownMenuItem disabled>Disabled</DropdownMenuItem>

@@ -41,7 +41,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
         {supportEmail ? (
           <a className="text-primary underline underline-offset-4" href={`mailto:${supportEmail}`}>Please contact us: {supportEmail}</a>
         ) : null}
-        <Button size="lg" asChild><a href={homeHref}><HomeIcon data-icon="inline-start" />Take Me Home</a></Button>
+        <Button size="lg" nativeButton={false} render={<a href={homeHref} />}><HomeIcon data-icon="inline-start" />Take Me Home</Button>
       </div>
     )
   }

@@ -38,11 +38,9 @@ export default function SideNav({ items, logo, logoCollapsed }: Props) {
           <NavLink key={name} to={to} end>
             {({ isActive }) => (
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <ListItem render={<span />} selected={isActive}>
-                    <ListItemIcon><Icon /></ListItemIcon>
-                    {isFullNav ? <span className="truncate text-sm">{name}</span> : <span className="sr-only">{name}</span>}
-                  </ListItem>
+                <TooltipTrigger render={<ListItem render={<span />} selected={isActive} />}>
+                  <ListItemIcon><Icon /></ListItemIcon>
+                  {isFullNav ? <span className="truncate text-sm">{name}</span> : <span className="sr-only">{name}</span>}
                 </TooltipTrigger>
                 {!isFullNav && <TooltipContent side="right">{name}</TooltipContent>}
               </Tooltip>

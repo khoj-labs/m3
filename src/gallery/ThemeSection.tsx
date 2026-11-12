@@ -46,7 +46,7 @@ export function ThemeSection({ theme, onThemeChange }: { onThemeChange: (name: T
   return (
     <Section name="theme" title="Preview">
       <Row label="Preview a theme across every component below">
-        <ToggleGroup type="single" variant="outline" value={theme} onValueChange={onThemeChange}>
+        <ToggleGroup variant="outline" value={[theme]} onValueChange={(v) => onThemeChange(v[0] ?? "")}>
           {Object.keys(themes).map((name) => <ToggleGroupItem key={name} value={name}>{name}</ToggleGroupItem>)}
         </ToggleGroup>
       </Row>
