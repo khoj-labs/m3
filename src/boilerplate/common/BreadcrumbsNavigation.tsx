@@ -16,7 +16,7 @@ export default function BreadcrumbsNavigation({ items }: { items: TBreadcrumb[] 
           return (
             <Fragment key={item.href}>
               <BreadcrumbItem>
-                {last ? <BreadcrumbPage>{content}</BreadcrumbPage> : <BreadcrumbLink asChild><Link to={item.href}>{content}</Link></BreadcrumbLink>}
+                {last ? <BreadcrumbPage>{content}</BreadcrumbPage> : <BreadcrumbLink render={<Link to={item.href} />}>{content}</BreadcrumbLink>}
               </BreadcrumbItem>
               {!last && <BreadcrumbSeparator />}
             </Fragment>
