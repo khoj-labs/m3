@@ -20,6 +20,6 @@
   "gates": {"lint": "pass", "typecheck": "pass", "build": "pass", "checkGallery": "pass"},
   "viewports": ["1280x900", "390x844"],
   "modes": ["dark"],
-  "commit": null,
+  "commit": "4599358",
   "notes": "input-group has no Radix primitive; the only diff between radix-nova and base-nova registry files is the import paths and the InputGroupButton type prop typing. Gallery demo (search addon, email addon) compared on reference and local build: rest, focus ring (click and Tab), sizes and computed styles matched. InputGroupButton is not exercised in the gallery. FormSections.tsx needed no change. Mixed state: depends on Radix Button (flagged) and Base UI Input (migrated); no visible difference. check:theme also passes."
 }
