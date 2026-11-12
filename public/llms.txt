@@ -6,6 +6,7 @@ Assistants: read AGENTS.md first (key rules, commands, where things live), then 
 
 ## Docs
 
+- [Live gallery](https://m3.khojlabs.com/gallery): every component in all variants and states, plus the boilerplate's page components and utilities
 - [AGENTS.md](https://github.com/khoj-labs/m3/blob/main/AGENTS.md): key rules, commands and repo map for AI assistants
 - [Conventions](https://github.com/khoj-labs/m3/blob/main/docs/conventions.md): component and boilerplate rules, code style, tooling gotchas, common tasks
 - [Theming spec](https://github.com/khoj-labs/m3/blob/main/docs/theming.md): variable reference, color role recipe, how to create a theme, validation

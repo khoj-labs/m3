@@ -1,6 +1,6 @@
 # Tour of m3
 
-For anyone, human or assistant, who wants to understand the repo without reading it all or watching the demo videos. Two depths: **TL;DR** and **Full tour**.
+For anyone, human or assistant, who wants to understand the repo without reading it all. Two depths: **TL;DR** and **Full tour**.
 
 Take every number from the repo, never from this page: run `npm run check:gallery` for component counts, and look at `src/components/ui` and `src/boilerplate`.
 
@@ -10,7 +10,7 @@ Write at most 8 lines covering:
 
 1. **What:** Material Design 3 components for React, built on shadcn/ui (Radix) and restyled with M3 tokens, plus hand-built extras shadcn doesn't ship, plus an application boilerplate.
 2. **What's in it:** component and boilerplate counts (from `npm run check:gallery`).
-3. **See it:** `npm run dev`, then `/gallery`: one page with tabs for Components (every variant and state), Page components (app shell, headers, states) and Utils (interactive demos).
+3. **See it:** the live gallery at https://m3.khojlabs.com/gallery, or locally `npm run dev` then `/gallery`. One page with tabs for Components (every variant and state), Page components (app shell, headers, states) and Utils (interactive demos).
 4. **Theme it:** all visual values live in `src/theme.css`; see [theming.md](theming.md).
 5. End by offering the full tour.
 
