@@ -1,0 +1,55 @@
+{
+  "task": "C-popover",
+  "outcome": "flagged (kept on Radix)",
+  "safety": {
+    "severity": "medium",
+    "findings": [
+      {"url": "https://github.com/mui/base-ui/issues/6217", "date": "2026-11-12", "status": "open", "summary": "Hovering another trigger after a click leaves the new popup pinned. Gallery has one click trigger, no hover or multi-trigger use.", "severity": "low"},
+      {"url": "https://github.com/mui/base-ui/issues/6169", "date": "2026-11-10", "status": "open", "summary": "Removing the focused element leaves focus on body in Firefox and WebKit (popups).", "severity": "medium"},
+      {"url": "https://github.com/mui/base-ui/issues/6010", "date": "2026-10-20", "status": "open", "summary": "Pressing inside a later-opened modal Dialog closes the Popover with outside-press. Gallery does not nest them.", "severity": "low"},
+      {"url": "https://github.com/mui/base-ui/issues/5410", "date": "2026-10-15", "status": "open", "summary": "Non-modal Popover stays open when interacting inside a same-origin iframe. Not used.", "severity": "low"},
+      {"url": "https://github.com/mui/base-ui/issues/5829", "date": "2026-11-04", "status": "open", "summary": "Opening in a local portal briefly scrolls ancestor and flickers. Gallery uses the default portal.", "severity": "low"},
+      {"url": "https://github.com/mui/base-ui/issues/6154", "date": "2026-11-03", "status": "closed", "summary": "onOpenChange(false) fired twice in Firefox when Tab leaves the popup; fixed.", "severity": "low"},
+      {"url": "https://github.com/mui/base-ui/issues/6041", "date": "2026-11-10", "status": "closed", "summary": "onOpenChange(false) fired again with reason focus-out; fixed.", "severity": "low"}
+    ],
+    "notChecked": ["Reddit, Hacker News and blog posts (only GitHub issue search for mui/base-ui, shadcn-ui/ui, radix-ui/primitives)", "Screen reader behaviour", "Safari and Firefox"]
+  },
+  "differences": [
+    {
+      "category": "interaction",
+      "where": "Outside click closes the popover",
+      "reference": "After clicking empty page area, popover closes and document.activeElement is BODY (focus is not moved to the trigger).",
+      "branch": "After clicking empty page area, popover closes and focus returns to the trigger button (activeElement is the Open popover button).",
+      "how": "Open /gallery#components, scroll to #popover, click Open popover, click empty area right of the content column, read document.activeElement."
+    },
+    {
+      "category": "look",
+      "where": "Open popup position and animation origin",
+      "reference": "Popup at x=1273,y=191 (integer), transform-origin 128px 0px.",
+      "branch": "Popup at x=1272.5,y=191.5 (half-pixel), transform-origin 128px -4px (offset by sideOffset), so the zoom-in-95 animation starts from a point 4px different. Static screenshots look identical.",
+      "how": "Open popover, compare getBoundingClientRect() and getComputedStyle(popup).transformOrigin."
+    },
+    {
+      "category": "accessibility",
+      "where": "Trigger and popup attributes",
+      "reference": "Trigger has data-state=open|closed, no tabindex; popup in a fixed wrapper div.",
+      "branch": "Trigger has explicit tabindex=0, data-popup-open and data-pressed while open instead of data-state; popup wrapped in a Positioner div role=presentation inside a portal container. Focus moves into the popup (tabindex -1) in both.",
+      "how": "Inspect trigger and popup attributes in each build."
+    },
+    {
+      "category": "api",
+      "where": "base-nova popover.tsx",
+      "reference": "Exports PopoverAnchor; PopoverTitle renders a div.",
+      "branch": "No PopoverAnchor export (unused in src); PopoverTitle renders a real heading via PopoverPrimitive.Title; extra side/alignOffset props on Content.",
+      "how": "Diff radix-nova and base-nova popover registry files."
+    }
+  ],
+  "apiChanges": ["asChild becomes render on PopoverTrigger (children move out of the element)"],
+  "consumersTouched": [],
+  "gates": {"lint": "not run", "typecheck": "not run", "build": "not run", "checkGallery": "not run"},
+  "viewports": ["2560x1267 actual (resize_window did not take effect)"],
+  "modes": ["dark"],
+  "commit": null,
+  "notes": "Swap was applied, compared, then reverted. Not checked: 390x844 (window resize ignored), Tab/Shift+Tab visual focus ring, frame-by-frame animation, reduced motion, gates (not run since flagged).",
+  "reasonNotMoved": "Outside-click behaviour differs: on Radix focus ends on body after an outside click, on Base UI it returns to the trigger (verified in browser). The popup also positions at half-pixel offsets and its zoom animation origin differs by 4px (128px -4px vs 128px 0px), and the trigger gets tabindex=0 and different state attributes. Retry if Base UI offers a way to not restore focus on outside press and the transform origin can be matched; re-run the comparison then."
+}
