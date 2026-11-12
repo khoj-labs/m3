@@ -1,0 +1,32 @@
+{
+  "task": "C-checkbox",
+  "outcome": "flagged (kept on Radix)",
+  "safety": {
+    "severity": "high",
+    "findings": [
+      {"url": "https://github.com/shadcn-ui/ui/issues/9357", "date": "2026-01-16", "status": "open", "summary": "No 'indeterminate' state in the new base-ui Checkbox (base-nova). Our gallery and transfer-list use checked=\"indeterminate\".", "severity": "high"},
+      {"url": "https://github.com/shadcn-ui/ui/issues/9249", "date": "2026-01-02", "status": "open", "summary": "Base-UI Checkbox/Switch not labeled correctly in forms. Our gallery wraps every Checkbox in a Label.", "severity": "high"},
+      {"url": "https://github.com/shadcn-ui/ui/issues/9726", "date": "2026-02-24", "status": "open", "summary": "Missing disabled style for Checkbox with base-ui.", "severity": "medium"},
+      {"url": "https://github.com/mui/base-ui/issues/4122", "date": "2026-02-24", "status": "closed", "summary": "Checkbox.Root gets no accessible name from a wrapping label (fixed).", "severity": "low"},
+      {"url": "https://github.com/mui/base-ui/issues/6206", "date": "2026-11-09", "status": "open", "summary": "Uncontrolled Checkbox ignores form reset.", "severity": "low"}
+    ],
+    "notChecked": ["Reddit, Hacker News and blogs not searched", "Issue lists read through a fetch summary, first page only"]
+  },
+  "differences": [
+    {
+      "category": "api",
+      "where": "Indeterminate state (gallery #checkbox and transfer-list)",
+      "reference": "Radix takes checked=\"indeterminate\" (aria-checked=mixed).",
+      "branch": "base-nova checkbox is the Base UI primitive, which uses a separate boolean `indeterminate` prop; checked=\"indeterminate\" is not valid. src/components/ui/transfer-list.tsx also uses it but is outside this task's files.",
+      "how": "Compare line 63 of src/gallery/FormSections.tsx and line 56 of src/components/ui/transfer-list.tsx with the base-nova registry file."
+    }
+  ],
+  "apiChanges": ["checked=\"indeterminate\" becomes the indeterminate prop", "Props type becomes CheckboxPrimitive.Root.Props", "onCheckedChange receives (checked, eventDetails)"],
+  "consumersTouched": [],
+  "gates": {"lint": "not checked", "typecheck": "not checked", "build": "not checked", "checkGallery": "not checked"},
+  "viewports": ["1280x900", "390x844"],
+  "modes": ["dark"],
+  "commit": null,
+  "notes": "Stopped at the safety step per protocol (high finding). base-nova file was not applied; screenshots and interaction checks were not performed. Registry files differ (not a no-op); class names are identical.",
+  "reasonNotMoved": "Safety check found open high-severity issues: shadcn-ui/ui#9357 (base-ui Checkbox has no checked=\"indeterminate\"; our gallery and transfer-list rely on it) and shadcn-ui/ui#9249 (Base UI Checkbox not labeled correctly in forms; every gallery checkbox sits inside a Label). Migrating also requires changing transfer-list.tsx, outside this task's files. Retry once those issues are closed, and allow transfer-list.tsx to be updated with the indeterminate prop."
+}
