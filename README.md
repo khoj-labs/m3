@@ -1,7 +1,9 @@
 # m3
+
+### [https://m3.khojlabs.com](https://m3.khojlabs.com)
 Material Design 3 components for React
 
-<img width="250" height="150" alt="" src="https://github.com/user-attachments/assets/93bc64d6-3211-4a81-a95b-2c89c6c6e870" /> 
+<img width="250" height="150" alt="" src="https://github.com/user-attachments/assets/93bc64d6-3211-4a81-a95b-2c89c6c6e870" />
 
 # What
 1. m3 takes the 30 shadcn/ui components that map to Material UI's core set
@@ -10,17 +12,7 @@ Material Design 3 components for React
 4. Adds every color, radius, font and easing value in **one file**, `src/theme.css`; you can change the look of the whole library by replacing that file.
 5. Adds application boilerplate (`src/boilerplate`) from react-gold-tsx - page header, list page, empty and 404 pages, app shell with collapsible side nav, route guard, alerts, error boundary, and utilities: logger, analytics facade, HTTP client, localStorage cache and keys, API error codes
 
-# Demo
-
-
-## Component Library
-https://github.com/user-attachments/assets/c3e20539-caab-4683-a1f0-0e45645a58f8
-
-
-
-## App Boilerplate
-https://github.com/user-attachments/assets/9d23c14e-d071-4e78-9a60-893d93c448cf
-
+# Getting Started
 
 ```sh
 npm install
