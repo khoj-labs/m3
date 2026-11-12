@@ -1,0 +1,1412 @@
+{
+ "version": 1,
+ "goal": "Move as many of m3's components from Radix to Base UI as can be moved with no perceptible difference in look, feel or interaction from the live Radix version, and document the reason for every component that cannot be moved.",
+ "branch": "factory/base-ui",
+ "reference": {
+  "url": "https://m3.khojlabs.com/gallery#components",
+  "build": "Radix (main). Never deploy or merge this branch while tasks run; the reference must stay Radix.",
+  "note": "The reference is the only source of truth for 'same'."
+ },
+ "orchestration": {
+  "orchestrator": "Reads this file, dispatches tasks whose dependsOn are complete, and never edits components itself.",
+  "isolation": "Each component task runs in its own git worktree branched from factory/base-ui, on its own devPort (see task).",
+  "maxParallel": 3,
+  "maxParallelWhy": "Tasks share one browser for visual comparison; more than three at once cause tab and focus contention.",
+  "resultFile": "factory/results/<task id>.json (written by the task; tasks never edit tasks.json, so parallel tasks cannot conflict)",
+  "mergeRule": "A task's commit is merged into factory/base-ui only when its result is 'migrated'. A 'flagged', 'blocked' or 'no-op' task merges only its result file.",
+  "waves": {
+   "1": [
+    "C-accordion",
+    "C-alert",
+    "C-avatar",
+    "C-badge",
+    "C-bottom-navigation",
+    "C-breadcrumb",
+    "C-button",
+    "C-card",
+    "C-checkbox",
+    "C-collapsible",
+    "C-dropdown-menu",
+    "C-fab",
+    "C-input",
+    "C-label",
+    "C-list",
+    "C-paper",
+    "C-popover",
+    "C-progress",
+    "C-radio-group",
+    "C-select",
+    "C-separator",
+    "C-skeleton",
+    "C-slider",
+    "C-sonner",
+    "C-switch",
+    "C-table",
+    "C-tabs",
+    "C-textarea",
+    "C-toggle",
+    "C-tooltip",
+    "C-typography"
+   ],
+   "2": [
+    "C-dialog",
+    "C-input-group",
+    "C-pagination",
+    "C-sheet",
+    "C-toggle-group"
+   ]
+  }
+ },
+ "globalRules": [
+  "Work only on the files in the task's `file`, `consumerFiles` and (for hand-built tasks) the files the task names. Do not touch components.json, package.json, other components or docs.",
+  "Never remove radix-ui from package.json; a later flagged component may still need it.",
+  "Do not push, deploy, open pull requests or change git config.",
+  "Respect AGENTS.md and docs/conventions.md: tokens only, no hard-coded visual values, props and imports ordering, no console outside logger.",
+  "A difference you cannot decide about counts as a difference. Flag it.",
+  "Everything you report must come from something you ran, saw or read; cite URLs for every safety finding. If you could not check something, say 'not checked'.",
+  "If a component this one depends on was flagged and stays on Radix, carry on: migrate this component against the dependency's Radix version and note the mixed state in `notes`. A flagged dependency only blocks a task if the mixed state itself causes a difference."
+ ],
+ "protocol": {
+  "title": "Steps every component task follows, in order",
+  "steps": [
+   {
+    "n": 1,
+    "name": "Safety check (before touching code)",
+    "do": [
+     "Search GitHub issues and discussions (mui/base-ui, shadcn-ui/ui, radix-ui/primitives), Reddit, Hacker News, and blogs for people who moved this component from Radix UI to Base UI and hit problems. Use at least these queries, adapted to the component: '<component> radix to base-ui migration', '<component> base ui regression', 'shadcn base-nova <component> issue', 'mui/base-ui <component> bug'.",
+     "For each relevant finding record URL, date, open or closed, and what breaks. Rate each: high = unresolved bug or missing parity in behaviour our gallery exercises (accessibility, focus, keyboard, positioning, controlled state, animation); medium = known workaround exists; low = styling or documentation.",
+     "If any finding is high: stop. Result 'flagged', reason 'safety', no code changes."
+    ]
+   },
+   {
+    "n": 2,
+    "name": "Baseline from the reference (Radix)",
+    "do": [
+     "On https://m3.khojlabs.com/gallery#components scroll the component's section into view. For every variant and state in the section take a screenshot at 1280x900 and at 390x844, light mode (dark too if T00 found it possible).",
+     "Exercise every interaction listed in the checklist below and write down what happens (what opens, where, how fast it animates, what receives focus, what announces)."
+    ]
+   },
+   {
+    "n": 3,
+    "name": "Switch",
+    "do": [
+     "Follow the task's `swap`. Update the consumers listed in `consumerFiles`: asChild becomes the render prop, type='single' / 'multiple' becomes Base UI's multiple flag and array values, onValueChange handlers receive Base UI's signature.",
+     "Run lint:fix, lint, typecheck, build and check:gallery. If one fails and the fix is anything other than the swap itself, that is a difference: flag it."
+    ]
+   },
+   {
+    "n": 4,
+    "name": "Compare against the reference",
+    "do": [
+     "Start the dev server on the task's devPort and open /gallery#components, scroll the same section. Repeat the screenshots and interactions from step 2 at the same viewport sizes and modes.",
+     "Look at: LOOK (size, spacing, colour, radius, elevation, typography, icons), FEEL (open and close animation, timing and easing, hover and press feedback, focus ring, popup position and flipping, scroll lock), INTERACTION (mouse, touch size, keyboard: Tab, Shift+Tab, Enter, Space, Escape, arrows, Home and End, type-ahead; controlled and uncontrolled; disabled; what happens on outside click), ACCESSIBILITY (role, aria-* attributes, focus return, label association), and API (any change a consumer must make beyond the mechanical swap).",
+     "Anything perceptible is a difference. Antialiasing noise of about one pixel is not. Differences that look like improvements still count: record them as such."
+    ]
+   },
+   {
+    "n": 5,
+    "name": "Decide",
+    "do": [
+     "No differences and no high safety finding: commit the migration (message: 'Move <component> to Base UI' plus a body listing the consumers touched) and write result 'migrated'.",
+     "Any difference: do not switch. Restore the component and its consumers to the factory branch state (git checkout the files), write result 'flagged' with every difference, and commit only the result file. Do not try to engineer the difference away; the point is to surface it."
+    ]
+   },
+   {
+    "n": 6,
+    "name": "Write the result",
+    "do": [
+     "Write factory/results/<task id>.json using resultSchema, then stop."
+    ]
+   }
+  ]
+ },
+ "interactionChecklist": {
+  "all": [
+   "Mouse hover, press and release",
+   "Keyboard Tab and Shift+Tab order and visible focus ring",
+   "Disabled state (no hover, no focus, not announced as actionable)",
+   "Controlled and uncontrolled behaviour in the gallery demo",
+   "Respects reduced motion if the reference does"
+  ],
+  "popups (dialog, sheet, popover, dropdown-menu, select, tooltip)": [
+   "Open with mouse and keyboard",
+   "Where it opens and how it flips near the viewport edge",
+   "Escape closes and focus returns to the trigger",
+   "Outside click closes (or not, same as reference)",
+   "Scroll lock while open",
+   "Enter and exit animation (duration, easing, origin)",
+   "Tooltip: delay before showing, and whether hovering the tooltip keeps it open"
+  ],
+  "selection (checkbox, radio-group, switch, toggle, toggle-group, slider, tabs, accordion, collapsible)": [
+   "Space and Enter toggles; arrow keys move; Home and End where the reference supports them",
+   "Indeterminate and multi-select states",
+   "Slider: drag, track click, keyboard step, thumb focus ring",
+   "Tabs and accordion: arrow-key navigation and which panel is open initially"
+  ]
+ },
+ "resultSchema": {
+  "task": "<task id>",
+  "outcome": "migrated | flagged (kept on Radix) | no-op | blocked",
+  "safety": {
+   "severity": "none | low | medium | high",
+   "findings": [
+    {
+     "url": "",
+     "date": "",
+     "status": "open | closed",
+     "summary": "",
+     "severity": ""
+    }
+   ],
+   "notChecked": []
+  },
+  "differences": [
+   {
+    "category": "look | feel | interaction | accessibility | api",
+    "where": "variant or state",
+    "reference": "what Radix does",
+    "branch": "what Base UI does",
+    "how": "steps to reproduce"
+   }
+  ],
+  "apiChanges": [],
+  "consumersTouched": [],
+  "gates": {
+   "lint": "pass | fail",
+   "typecheck": "pass | fail",
+   "build": "pass | fail",
+   "checkGallery": "pass | fail"
+  },
+  "viewports": [
+   "1280x900",
+   "390x844"
+  ],
+  "modes": [
+   "light"
+  ],
+  "commit": "<sha or null>",
+  "notes": "",
+  "reasonNotMoved": "Required when outcome is flagged or blocked: one paragraph a stranger could act on: what differed or what the safety check found, with URLs, plus the condition for retrying."
+ },
+ "tasks": [
+  {
+   "id": "T00-preflight",
+   "kind": "preflight",
+   "title": "Preflight: reference site, tooling and baseline inventory",
+   "dependsOn": [],
+   "goal": "Confirm the environment before any component moves.",
+   "steps": [
+    "Confirm https://m3.khojlabs.com/gallery#components loads and is the Radix build (view source of a Dialog or Select in DevTools: Radix emits data-state and data-radix-* attributes, Base UI emits data-open/data-closed/data-base-ui-*). Record the deployed commit if the page exposes it; otherwise record the date checked.",
+    "Run npm ci, then lint, typecheck, build, check:gallery and check:theme on the factory branch. They must all pass before any task starts; record the output summary.",
+    "Confirm @base-ui/react is in package.json and note its installed version.",
+    "Confirm the Chrome automation tools work: open the reference gallery, scroll a section into view, take a screenshot. Report if dark-mode emulation (prefers-color-scheme) is possible; if not, state that dark mode cannot be compared and every later task records dark as 'not tested'.",
+    "Create factory/results/ (with a .gitkeep) if missing."
+   ],
+   "result": null
+  },
+  {
+   "id": "C-accordion",
+   "kind": "generated",
+   "component": "accordion",
+   "file": "src/components/ui/accordion.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Accordion as AccordionPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "accordion",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('accordion').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5301,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/accordion.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/accordion.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/accordion.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-alert",
+   "kind": "generated",
+   "component": "alert",
+   "file": "src/components/ui/alert.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": null,
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx",
+    "src/boilerplate/gallery/EmbedRoutes.tsx"
+   ],
+   "gallerySection": {
+    "id": "alert",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('alert').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5302,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/alert.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/alert.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/alert.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-avatar",
+   "kind": "generated",
+   "component": "avatar",
+   "file": "src/components/ui/avatar.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Avatar as AvatarPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx",
+    "src/boilerplate/layouts/UserSettings.tsx"
+   ],
+   "gallerySection": {
+    "id": "avatar",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('avatar').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5303,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/avatar.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/avatar.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/avatar.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-badge",
+   "kind": "generated",
+   "component": "badge",
+   "file": "src/components/ui/badge.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slot",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "badge",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('badge').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5304,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/badge.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/badge.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/badge.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-bottom-navigation",
+   "kind": "hand-built",
+   "component": "bottom-navigation",
+   "file": "src/components/ui/bottom-navigation.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Tabs as TabsPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/Gallery.tsx",
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "bottom-navigation",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('bottom-navigation').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5305,
+   "result": null,
+   "swap": "Hand-built: no registry file. Replace Radix Tabs with the Base UI equivalent, @base-ui/react/tabs. Replace data-[state=...] selectors with the data-open/data-checked/data-active variants from shadcn/tailwind.css. Keep the component's public API unless impossible; if the public API must change (for example asChild becoming render), list the change in `apiChanges` and update every consumer."
+  },
+  {
+   "id": "C-breadcrumb",
+   "kind": "generated",
+   "component": "breadcrumb",
+   "file": "src/components/ui/breadcrumb.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slot",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx",
+    "src/boilerplate/common/BreadcrumbsNavigation.tsx"
+   ],
+   "gallerySection": {
+    "id": "breadcrumb",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('breadcrumb').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5306,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/breadcrumb.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/breadcrumb.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/breadcrumb.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-button",
+   "kind": "generated",
+   "component": "button",
+   "file": "src/components/ui/button.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slot",
+   "uiDependencies": [],
+   "uiDependents": [
+    "combobox",
+    "dialog",
+    "input-group",
+    "pagination",
+    "sheet",
+    "transfer-list"
+   ],
+   "consumerFiles": [
+    "src/gallery/OverlaySections.tsx",
+    "src/gallery/DisplaySections.tsx",
+    "src/gallery/FormSections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx",
+    "src/boilerplate/gallery/ComponentSections.tsx",
+    "src/boilerplate/gallery/Snippet.tsx",
+    "src/boilerplate/gallery/PageSections.tsx",
+    "src/boilerplate/common/PageHeader.tsx",
+    "src/boilerplate/common/SpinnerButton.tsx",
+    "src/boilerplate/common/ErrorBoundary.tsx",
+    "src/boilerplate/layouts/SideNav.tsx",
+    "src/boilerplate/layouts/UserSettings.tsx",
+    "src/boilerplate/pages/PageNotFound.tsx"
+   ],
+   "gallerySection": {
+    "id": "button",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('button').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5307,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/button.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/button.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/button.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-card",
+   "kind": "generated",
+   "component": "card",
+   "file": "src/components/ui/card.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": null,
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "card",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('card').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5308,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/card.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/card.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/card.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-checkbox",
+   "kind": "generated",
+   "component": "checkbox",
+   "file": "src/components/ui/checkbox.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Checkbox as CheckboxPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [
+    "transfer-list"
+   ],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "checkbox",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('checkbox').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5309,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/checkbox.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/checkbox.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/checkbox.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-collapsible",
+   "kind": "generated",
+   "component": "collapsible",
+   "file": "src/components/ui/collapsible.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Collapsible as CollapsiblePrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "collapsible",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('collapsible').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5310,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/collapsible.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/collapsible.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/collapsible.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-dialog",
+   "kind": "generated",
+   "component": "dialog",
+   "file": "src/components/ui/dialog.tsx",
+   "dependsOn": [
+    "T00-preflight",
+    "C-button"
+   ],
+   "wave": 2,
+   "radixPrimitive": "Dialog as DialogPrimitive",
+   "uiDependencies": [
+    "button"
+   ],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/OverlaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "dialog",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('dialog').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5311,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/dialog.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/dialog.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/dialog.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-dropdown-menu",
+   "kind": "generated",
+   "component": "dropdown-menu",
+   "file": "src/components/ui/dropdown-menu.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "DropdownMenu as DropdownMenuPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/OverlaySections.tsx",
+    "src/boilerplate/layouts/UserSettings.tsx"
+   ],
+   "gallerySection": {
+    "id": "dropdown-menu",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('dropdown-menu').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5312,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/dropdown-menu.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/dropdown-menu.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/dropdown-menu.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-fab",
+   "kind": "hand-built",
+   "component": "fab",
+   "file": "src/components/ui/fab.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slot",
+   "uiDependencies": [],
+   "uiDependents": [
+    "speed-dial"
+   ],
+   "consumerFiles": [
+    "src/gallery/Gallery.tsx",
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "fab",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('fab').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5313,
+   "result": null,
+   "swap": "Hand-built: no registry file. Replace Radix Slot (asChild) with the Base UI equivalent, using the `render` prop / `useRender` from @base-ui/react, the same way base-nova's Button does it. Replace data-[state=...] selectors with the data-open/data-checked/data-active variants from shadcn/tailwind.css. Keep the component's public API unless impossible; if the public API must change (for example asChild becoming render), list the change in `apiChanges` and update every consumer."
+  },
+  {
+   "id": "C-input",
+   "kind": "generated",
+   "component": "input",
+   "file": "src/components/ui/input.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": null,
+   "uiDependencies": [],
+   "uiDependents": [
+    "input-group"
+   ],
+   "consumerFiles": [
+    "src/gallery/OverlaySections.tsx",
+    "src/gallery/FormSections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx",
+    "src/boilerplate/gallery/PageSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "input",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('input').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5314,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/input.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/input.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/input.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-input-group",
+   "kind": "generated",
+   "component": "input-group",
+   "file": "src/components/ui/input-group.tsx",
+   "dependsOn": [
+    "T00-preflight",
+    "C-button",
+    "C-input",
+    "C-textarea"
+   ],
+   "wave": 2,
+   "radixPrimitive": null,
+   "uiDependencies": [
+    "button",
+    "input",
+    "textarea"
+   ],
+   "uiDependents": [
+    "combobox"
+   ],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "input-group",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('input-group').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5315,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/input-group.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/input-group.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/input-group.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-label",
+   "kind": "generated",
+   "component": "label",
+   "file": "src/components/ui/label.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Label as LabelPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx",
+    "src/boilerplate/gallery/EmbedRoutes.tsx",
+    "src/boilerplate/gallery/PageSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "label",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('label').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5316,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/label.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/label.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/label.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-list",
+   "kind": "hand-built",
+   "component": "list",
+   "file": "src/components/ui/list.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slot",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx",
+    "src/gallery/GalleryNav.tsx",
+    "src/boilerplate/gallery/PageSections.tsx",
+    "src/boilerplate/common/ListPage.tsx",
+    "src/boilerplate/layouts/SideNav.tsx"
+   ],
+   "gallerySection": {
+    "id": "list",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('list').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5317,
+   "result": null,
+   "swap": "Hand-built: no registry file. Replace Radix Slot (asChild) with the Base UI equivalent, using the `render` prop / `useRender` from @base-ui/react, the same way base-nova's Button does it. Replace data-[state=...] selectors with the data-open/data-checked/data-active variants from shadcn/tailwind.css. Keep the component's public API unless impossible; if the public API must change (for example asChild becoming render), list the change in `apiChanges` and update every consumer."
+  },
+  {
+   "id": "C-pagination",
+   "kind": "generated",
+   "component": "pagination",
+   "file": "src/components/ui/pagination.tsx",
+   "dependsOn": [
+    "T00-preflight",
+    "C-button"
+   ],
+   "wave": 2,
+   "radixPrimitive": null,
+   "uiDependencies": [
+    "button"
+   ],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "pagination",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('pagination').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5318,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/pagination.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/pagination.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/pagination.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-paper",
+   "kind": "hand-built",
+   "component": "paper",
+   "file": "src/components/ui/paper.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slot",
+   "uiDependencies": [],
+   "uiDependents": [
+    "transfer-list"
+   ],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "paper",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('paper').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5319,
+   "result": null,
+   "swap": "Hand-built: no registry file. Replace Radix Slot (asChild) with the Base UI equivalent, using the `render` prop / `useRender` from @base-ui/react, the same way base-nova's Button does it. Replace data-[state=...] selectors with the data-open/data-checked/data-active variants from shadcn/tailwind.css. Keep the component's public API unless impossible; if the public API must change (for example asChild becoming render), list the change in `apiChanges` and update every consumer."
+  },
+  {
+   "id": "C-popover",
+   "kind": "generated",
+   "component": "popover",
+   "file": "src/components/ui/popover.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Popover as PopoverPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/OverlaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "popover",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('popover').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5320,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/popover.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/popover.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/popover.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-progress",
+   "kind": "generated",
+   "component": "progress",
+   "file": "src/components/ui/progress.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Progress as ProgressPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "progress",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('progress').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5321,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/progress.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/progress.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/progress.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-radio-group",
+   "kind": "generated",
+   "component": "radio-group",
+   "file": "src/components/ui/radio-group.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "RadioGroup as RadioGroupPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "radio-group",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('radio-group').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5322,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/radio-group.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/radio-group.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/radio-group.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-select",
+   "kind": "generated",
+   "component": "select",
+   "file": "src/components/ui/select.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Select as SelectPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx",
+    "src/boilerplate/gallery/PageSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "select",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('select').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5323,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/select.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/select.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/select.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-separator",
+   "kind": "generated",
+   "component": "separator",
+   "file": "src/components/ui/separator.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Separator as SeparatorPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "separator",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('separator').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5324,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/separator.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/separator.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/separator.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-sheet",
+   "kind": "generated",
+   "component": "sheet",
+   "file": "src/components/ui/sheet.tsx",
+   "dependsOn": [
+    "T00-preflight",
+    "C-button"
+   ],
+   "wave": 2,
+   "radixPrimitive": "Dialog as SheetPrimitive",
+   "uiDependencies": [
+    "button"
+   ],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/OverlaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "sheet",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('sheet').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5325,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/sheet.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/sheet.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/sheet.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-skeleton",
+   "kind": "generated",
+   "component": "skeleton",
+   "file": "src/components/ui/skeleton.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": null,
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx",
+    "src/boilerplate/gallery/PageSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "skeleton",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('skeleton').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5326,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/skeleton.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/skeleton.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/skeleton.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-slider",
+   "kind": "generated",
+   "component": "slider",
+   "file": "src/components/ui/slider.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slider as SliderPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "slider",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('slider').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5327,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/slider.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/slider.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/slider.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-sonner",
+   "kind": "generated",
+   "component": "sonner",
+   "file": "src/components/ui/sonner.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": null,
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/Gallery.tsx",
+    "src/boilerplate/common/AppAlerts.tsx"
+   ],
+   "gallerySection": {
+    "id": "sonner",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('sonner').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5328,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/sonner.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/sonner.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/sonner.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-switch",
+   "kind": "generated",
+   "component": "switch",
+   "file": "src/components/ui/switch.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Switch as SwitchPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx",
+    "src/boilerplate/gallery/EmbedRoutes.tsx",
+    "src/boilerplate/gallery/PageSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "switch",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('switch').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5329,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/switch.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/switch.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/switch.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-table",
+   "kind": "generated",
+   "component": "table",
+   "file": "src/components/ui/table.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": null,
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/DisplaySections.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "table",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('table').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5330,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/table.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/table.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/table.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-tabs",
+   "kind": "generated",
+   "component": "tabs",
+   "file": "src/components/ui/tabs.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Tabs as TabsPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/Gallery.tsx",
+    "src/gallery/DisplaySections.tsx"
+   ],
+   "gallerySection": {
+    "id": "tabs",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('tabs').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5331,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/tabs.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/tabs.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/tabs.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-textarea",
+   "kind": "generated",
+   "component": "textarea",
+   "file": "src/components/ui/textarea.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": null,
+   "uiDependencies": [],
+   "uiDependents": [
+    "input-group"
+   ],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "textarea",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('textarea').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5332,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/textarea.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/textarea.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/textarea.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-toggle",
+   "kind": "generated",
+   "component": "toggle",
+   "file": "src/components/ui/toggle.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Toggle as TogglePrimitive",
+   "uiDependencies": [],
+   "uiDependents": [
+    "toggle-group"
+   ],
+   "consumerFiles": [
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "toggle",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('toggle').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5333,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/toggle.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/toggle.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/toggle.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-toggle-group",
+   "kind": "generated",
+   "component": "toggle-group",
+   "file": "src/components/ui/toggle-group.tsx",
+   "dependsOn": [
+    "T00-preflight",
+    "C-toggle"
+   ],
+   "wave": 2,
+   "radixPrimitive": "ToggleGroup as ToggleGroupPrimitive",
+   "uiDependencies": [
+    "toggle"
+   ],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/ThemeSection.tsx",
+    "src/gallery/FormSections.tsx"
+   ],
+   "gallerySection": {
+    "id": "toggle-group",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('toggle-group').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5334,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/toggle-group.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/toggle-group.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/toggle-group.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-tooltip",
+   "kind": "generated",
+   "component": "tooltip",
+   "file": "src/components/ui/tooltip.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Tooltip as TooltipPrimitive",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/Gallery.tsx",
+    "src/gallery/OverlaySections.tsx",
+    "src/boilerplate/gallery/EmbedRoutes.tsx",
+    "src/boilerplate/layouts/SideNav.tsx",
+    "src/boilerplate/layouts/AppShell.tsx",
+    "src/boilerplate/layouts/UserSettings.tsx"
+   ],
+   "gallerySection": {
+    "id": "tooltip",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('tooltip').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5335,
+   "result": null,
+   "registry": {
+    "radix": "https://ui.shadcn.com/r/styles/radix-nova/tooltip.json",
+    "base": "https://ui.shadcn.com/r/styles/base-nova/tooltip.json"
+   },
+   "swap": "npx shadcn@latest add https://ui.shadcn.com/r/styles/base-nova/tooltip.json --overwrite (do NOT change components.json). If the radix-nova and base-nova registry files are identical, nothing to switch: result 'no-op'."
+  },
+  {
+   "id": "C-typography",
+   "kind": "hand-built",
+   "component": "typography",
+   "file": "src/components/ui/typography.tsx",
+   "dependsOn": [
+    "T00-preflight"
+   ],
+   "wave": 1,
+   "radixPrimitive": "Slot",
+   "uiDependencies": [],
+   "uiDependents": [],
+   "consumerFiles": [
+    "src/gallery/Gallery.tsx",
+    "src/gallery/DisplaySections.tsx",
+    "src/gallery/Section.tsx",
+    "src/gallery/ThemeSection.tsx",
+    "src/boilerplate/gallery/UtilSections.tsx",
+    "src/boilerplate/gallery/ComponentSections.tsx",
+    "src/boilerplate/gallery/EmbedRoutes.tsx",
+    "src/boilerplate/gallery/PageSections.tsx",
+    "src/boilerplate/common/PageHeader.tsx",
+    "src/boilerplate/common/EmptyState.tsx",
+    "src/boilerplate/common/ErrorBoundary.tsx",
+    "src/boilerplate/pages/PageNotFound.tsx"
+   ],
+   "gallerySection": {
+    "id": "typography",
+    "tab": "components",
+    "referenceUrl": "https://m3.khojlabs.com/gallery#components",
+    "note": "Open referenceUrl, then run document.getElementById('typography').scrollIntoView() (the hash selects the tab, not the section)."
+   },
+   "devPort": 5336,
+   "result": null,
+   "swap": "Hand-built: no registry file. Replace Radix Slot (asChild) with the Base UI equivalent, using the `render` prop / `useRender` from @base-ui/react, the same way base-nova's Button does it. Replace data-[state=...] selectors with the data-open/data-checked/data-active variants from shadcn/tailwind.css. Keep the component's public API unless impossible; if the public API must change (for example asChild becoming render), list the change in `apiChanges` and update every consumer."
+  },
+  {
+   "id": "T98-sweep",
+   "kind": "sweep",
+   "title": "Regression sweep over components that were not migrated directly",
+   "dependsOn": [
+    "T00-preflight",
+    "C-accordion",
+    "C-alert",
+    "C-avatar",
+    "C-badge",
+    "C-bottom-navigation",
+    "C-breadcrumb",
+    "C-button",
+    "C-card",
+    "C-checkbox",
+    "C-collapsible",
+    "C-dialog",
+    "C-dropdown-menu",
+    "C-fab",
+    "C-input",
+    "C-input-group",
+    "C-label",
+    "C-list",
+    "C-pagination",
+    "C-paper",
+    "C-popover",
+    "C-progress",
+    "C-radio-group",
+    "C-select",
+    "C-separator",
+    "C-sheet",
+    "C-skeleton",
+    "C-slider",
+    "C-sonner",
+    "C-switch",
+    "C-table",
+    "C-tabs",
+    "C-textarea",
+    "C-toggle",
+    "C-toggle-group",
+    "C-tooltip",
+    "C-typography"
+   ],
+   "goal": "Components that depend on migrated ones (combobox, input-group, pagination, speed-dial, transfer-list and the whole boilerplate, which composes them) can change without having their own task. Compare them too.",
+   "scope": {
+    "uiSections": [
+     "combobox",
+     "speed-dial",
+     "transfer-list",
+     "combobox"
+    ],
+    "tabs": [
+     "components",
+     "page-components",
+     "utils"
+    ],
+    "compare": "Every section on all three tabs of https://m3.khojlabs.com/gallery vs the branch build, plus the three /boilerplate/embed/* iframe demos."
+   },
+   "result": null
+  },
+  {
+   "id": "T99-rollup",
+   "kind": "rollup",
+   "title": "Orchestrator rollup and decision",
+   "dependsOn": [
+    "T98-sweep"
+   ],
+   "goal": "Land every migrated component, document every component that stays on Radix, and report. Never decide silently.",
+   "steps": [
+    "Read every factory/results/*.json. Make sure each component task has a result; list any that do not.",
+    "Write docs/base-ui-migration.md: (1) a summary table of component, outcome (migrated | no-op | kept on Radix), safety severity; (2) for every component kept on Radix: the reason (safety finding with URL, or each look, feel, interaction, accessibility or API difference with reproduction steps), the Radix behaviour versus the Base UI behaviour, and the condition for retrying (for example 'upstream issue <URL> closed' or 'consumer API change accepted'); (3) the API changes that migrated components introduced (asChild to render and so on). Write it from the result files only; do not add findings that no task reported.",
+    "Link docs/base-ui-migration.md from docs/conventions.md (one line) and note in README credits that Radix UI is still used by the listed components, if any are kept.",
+    "Set components.json style to base-nova so any component added from now on defaults to Base UI. Keep radix-ui in package.json only if at least one component stays on Radix; otherwise remove it and the README Radix credit.",
+    "Update AGENTS.md and docs/conventions.md wording that says components are built on Radix so it describes the real mixed or Base UI state. Do not change the token rules.",
+    "Run lint, typecheck, build, check:gallery and check:theme. Fix nothing that is not part of this step; report failures.",
+    "Do not push, deploy or open a pull request. Stop and report to the user: counts per outcome, the kept-on-Radix list with one-line reasons, and a recommendation for each."
+   ],
+   "result": null
+  }
+ ],
+ "successCriteria": [
+  "Every component ends in exactly one state: migrated, no-op (Radix and Base UI versions are identical), or kept on Radix with a documented reason.",
+  "No component is moved on the strength of 'close enough'. The reference is https://m3.khojlabs.com, built from main (Radix).",
+  "Every kept-on-Radix component has its reason, evidence and the condition under which to retry written down (docs/base-ui-migration.md), so a later attempt can start from facts."
+ ]
+}
