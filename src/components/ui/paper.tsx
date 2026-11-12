@@ -1,7 +1,7 @@
+import { mergeProps } from "@base-ui/react/merge-props"
+import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
-import { Slot } from "radix-ui"
-import * as React from "react"
 
 /** A plain surface. Elevation is expressed through tonal surface + shadow tokens. */
 const paperVariants = cva("text-foreground transition-shadow", {
@@ -31,18 +31,22 @@ function Paper({
   elevation,
   variant,
   shape,
-  asChild = false,
+  render,
   ...props
-}: React.ComponentProps<"div"> &
-  VariantProps<typeof paperVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : "div"
-  return (
-    <Comp
-      data-slot="paper"
-      className={cn(paperVariants({ elevation, variant, shape }), className)}
-      {...props}
-    />
-  )
+}: useRender.ComponentProps<"div"> & VariantProps<typeof paperVariants>) {
+  return useRender({
+    defaultTagName: "div",
+    props: mergeProps<"div">(
+      {
+        className: cn(paperVariants({ elevation, variant, shape }), className),
+      },
+      props
+    ),
+    render,
+    state: {
+      slot: "paper",
+    },
+  })
 }
 
 export { Paper, paperVariants }
