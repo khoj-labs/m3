@@ -1,0 +1,28 @@
+{
+  "task": "C-slider",
+  "outcome": "flagged (kept on Radix)",
+  "safety": {
+    "severity": "medium",
+    "findings": [
+      {"url": "https://github.com/mui/base-ui/issues/5296", "date": "2026-07-21", "status": "open", "summary": "Slider: VoiceOver announces a stale value when navigating with the VO cursor.", "severity": "medium"},
+      {"url": "https://github.com/shadcn-ui/ui/issues/10221", "date": "2026-03-28", "status": "open", "summary": "Base UI slider thumbs lack aria-label, so multi-thumb range sliders are unlabelled (gallery has a range slider). Workaround: pass aria-label per thumb.", "severity": "medium"},
+      {"url": "https://github.com/shadcn-ui/ui/issues/12345", "date": "2026-10-16", "status": "open", "summary": "Base UI Slider thumb has no visible keyboard focus across v4 styles. In the branch focus-visible was true on the hidden input; ring visibility not verified.", "severity": "medium"},
+      {"url": "https://github.com/mui/base-ui/issues/5995", "date": "2026-10-19", "status": "closed", "summary": "thumbAlignment=edge never re-measured after control resize; fixed in PR 6000. base-nova uses thumbAlignment=edge.", "severity": "low"},
+      {"url": "https://github.com/shadcn-ui/ui/issues/9196", "date": "2025-12-24", "status": "open", "summary": "data-horizontal/data-vertical selectors vs data-[orientation]; no effect seen in the gallery.", "severity": "low"}
+    ],
+    "notChecked": ["Screen reader behaviour", "Only titles/summaries from GitHub search pages were read, not issue bodies", "Reddit, Hacker News and blogs not searched"]
+  },
+  "differences": [
+    {"category": "look", "where": "all four gallery sliders (className placement)", "reference": "className goes on the Root element that also carries the flex/width classes, so className w-48 overrides w-full: sliders are 192px wide; vertical slider h-24 (96px).", "branch": "base-nova puts className on an outer Root div with data-horizontal:w-full and the layout classes on an inner Control. w-48 loses to the data-horizontal:w-full variant: horizontal sliders measured 864px wide, stacked in rows; vertical slider measured 160px high (min-h-40 on Control) instead of 96px.", "how": "Open /gallery#components, scroll to #slider, measure getBoundingClientRect of [data-slot=slider]: reference 192x4 (vertical h 96), branch 864x4 (vertical 4x160)."},
+    {"category": "accessibility", "where": "thumbs", "reference": "Thumb is a span role=slider with aria-valuenow/min/max; range thumbs have aria-label.", "branch": "Thumb is a div containing a hidden input type=range; Root has role=group. Range thumbs get aria-valuetext 'start range'/'end range' and no aria-label. Screen-reader output differs (not run).", "how": "Inspect #slider [data-slot=slider-thumb] in each build."},
+    {"category": "api", "where": "DOM and attributes", "reference": "Root/Track/Range/Thumb are spans; data-radix-collection-item; no inputs.", "branch": "Divs, extra Control wrapper, data-base-ui-slider-indicator, data-index, one input[type=range] per thumb.", "how": "document.querySelectorAll('#slider input').length: 0 vs 5."}
+  ],
+  "apiChanges": ["Prop type becomes SliderPrimitive.Root.Props; onValueChange signature becomes (value, eventDetails). Gallery uses onValueChange={setRange}, which would still work. Not applied."],
+  "consumersTouched": [],
+  "gates": {"lint": "not run", "typecheck": "not run", "build": "not run", "checkGallery": "not run"},
+  "viewports": ["reference tab 500x701 (resize_window did not change the viewport); branch tab 1280x757"],
+  "modes": ["dark"],
+  "commit": null,
+  "notes": "Click thumb then ArrowRight x2, Home, End, PageDown gave 90 on both (keyboard matches). Not checked: 390x844 screenshots, drag, track click, disabled hover, vertical keyboard, reduced motion, focus ring pixels, touch.",
+  "reasonNotMoved": "The base-nova slider moves className to an outer Root and keeps layout classes on an inner Control, so the gallery's w-48 and h-24 overrides no longer apply: sliders render 864px wide and the vertical one 160px tall instead of 192px and 96px. Accessibility structure also differs (role=group plus hidden input[type=range] per thumb; range thumbs lose aria-label), and open issues exist for VoiceOver stale values (https://github.com/mui/base-ui/issues/5296), missing multi-thumb labels (https://github.com/shadcn-ui/ui/issues/10221) and focus visibility (https://github.com/shadcn-ui/ui/issues/12345). Retry when the registry file applies className to the element carrying the layout classes, and per-thumb labelling and focus-ring visibility are confirmed identical."
+}
