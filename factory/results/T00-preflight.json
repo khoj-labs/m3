@@ -1,0 +1,18 @@
+{
+  "task": "T00-preflight",
+  "outcome": "migrated",
+  "checked": "2026-11-12",
+  "reference": {
+    "url": "https://m3.khojlabs.com/gallery#components",
+    "build": "Radix: 48 [data-gallery] sections, 48 [data-radix-collection-item], 136 [data-state], 0 Base UI markers",
+    "commit": "not exposed by the page"
+  },
+  "gates": { "lint": "pass", "typecheck": "pass", "build": "pass", "checkGallery": "pass", "checkTheme": "pass" },
+  "baseUi": { "package": "@base-ui/react", "installed": "1.9.0" },
+  "browser": {
+    "tools": "navigate, javascript_tool and screenshots work",
+    "modes": ["dark (system preference of the test browser)"],
+    "lightMode": "cannot be emulated: no prefers-color-scheme override tool. Every comparison runs in the browser's system dark mode; light is 'not tested'."
+  },
+  "notes": "Reference and branch must be compared in the same browser so both render in the same mode."
+}
