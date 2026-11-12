@@ -1,6 +1,7 @@
+import { mergeProps } from "@base-ui/react/merge-props"
+import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
-import { Slot } from "radix-ui"
 import * as React from "react"
 
 /** M3 type scale. Each variant has a sensible default element (see `defaultTag`). */
@@ -31,7 +32,7 @@ const typographyVariants = cva("m-0", {
 
 type Variant = NonNullable<VariantProps<typeof typographyVariants>["variant"]>
 
-const defaultTag: Record<Variant, React.ElementType> = {
+const defaultTag: Record<Variant, "h1" | "h2" | "h3" | "h4" | "p" | "span" | "code"> = {
   display: "h1",
   headline: "h2",
   title: "h3",
@@ -50,22 +51,25 @@ function Typography({
   align,
   noWrap,
   as,
-  asChild = false,
+  render,
   ...props
-}: Omit<React.ComponentProps<"p">, "ref"> &
+}: Omit<useRender.ComponentProps<"p">, "ref"> &
   VariantProps<typeof typographyVariants> & {
     as?: React.ElementType
-    asChild?: boolean
   }) {
-  const Comp: React.ElementType = asChild ? Slot.Root : (as ?? defaultTag[variant ?? "body"])
-  return (
-    <Comp
-      data-slot="typography"
-      data-variant={variant}
-      className={cn(typographyVariants({ variant, tone, align, noWrap }), className)}
-      {...props}
-    />
-  )
+  return useRender({
+    defaultTagName: defaultTag[variant ?? "body"],
+    props: mergeProps<"p">(
+      {
+        className: cn(typographyVariants({ variant, tone, align, noWrap }), className),
+        // @ts-expect-error data-* attributes are valid on any element
+        "data-slot": "typography",
+        "data-variant": variant,
+      },
+      props
+    ),
+    render: render ?? (as ? React.createElement(as) : undefined),
+  })
 }
 
 export { Typography, typographyVariants }
