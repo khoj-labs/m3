@@ -7,9 +7,13 @@ This project follows [Semantic Versioning](https://semver.org).
 ### Planned
 - Registry install
 
+## [1.2.0] - 2026-11-13
+### Added
+Chores: Added githooks
+
 ## [1.1.0] - 2026-11-13
 ### Added
-Updated gallery header
+Gallery header
 
 ## [1.0.0] - 2026-11-13
 ### Added
