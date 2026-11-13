@@ -4,7 +4,7 @@ import AppAlerts from "@/boilerplate/common/AppAlerts"
 import Spinner from "@/boilerplate/common/Spinner"
 import { ComponentsGroup } from "@/boilerplate/gallery/ComponentSections"
 import { UtilsGroup } from "@/boilerplate/gallery/UtilSections"
-import { AppBar, AppBarLeading, AppBarTitle } from "@/components/ui/app-bar"
+import { AppBar, AppBarActions, AppBarLeading, AppBarTitle } from "@/components/ui/app-bar"
 import { BottomNavigation, BottomNavigationItem } from "@/components/ui/bottom-navigation"
 import { Fab } from "@/components/ui/fab"
 import { Toaster } from "@/components/ui/sonner"
@@ -66,6 +66,9 @@ export default function Gallery() {
             <span aria-hidden className="grid size-10 place-items-center rounded-full bg-md-primary-container text-md-on-primary-container"><BoxesIcon className="size-5" /></span>
           </AppBarLeading>
           <AppBarTitle>M3</AppBarTitle>
+          <AppBarActions>
+            <Typography variant="caption" tone="muted">v{__APP_VERSION__}</Typography>
+          </AppBarActions>
         </AppBar>
 
         <div className="mx-auto max-w-6xl px-4 pt-4 pb-28 md:pb-12">
